@@ -2,7 +2,7 @@ import { defineConfig, defineCollection, s } from "velite";
 
 const computeFilelds = <T extends { slug: string }>(data: T) => ({
   ...data,
-  slugAsparams: data.slug.split("/").slice(1).join("/"),
+  slugAsParams: data.slug.split("/").slice(1).join("/"),
 });
 
 const posts = defineCollection({
