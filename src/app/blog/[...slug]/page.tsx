@@ -1,7 +1,8 @@
 import { posts } from "#site/content";
 import { MDXContent } from "@/components/mdx-components";
-import { appendFile } from "fs";
 import { notFound } from "next/navigation";
+
+import "@/styles/mdx.css"
 
 interface PostPageProps {
   params: {
@@ -10,13 +11,13 @@ interface PostPageProps {
 }
 
 async function getPostFromParams(params: PostPageProps["params"]) {
-  const slug = params?.slug.join("/");
-  const post = posts.find((post) => post?.slugAsParams === slug);
+  const slug = params?.slug?.join("/");
+  const post = posts.find((post) => post.slugAsParams === slug);
 
   return post;
 }
 
-export async function generateStaticPrarams(): Promise<
+export async function generateStaticParams(): Promise<
   PostPageProps["params"][]
 > {
   return posts.map((post) => ({ slug: post.slugAsParams.split("/") }));
