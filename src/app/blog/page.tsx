@@ -4,7 +4,7 @@ import { QueryPagination } from "@/components/query-pagination";
 import { sortPosts } from "@/lib/utils";
 import { Metadata } from "next";
 
-export const metatdata: Metadata = {
+export const metadata: Metadata = {
   title: "My bolg",
   description: "This is a description",
 };
