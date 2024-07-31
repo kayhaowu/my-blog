@@ -1,5 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { siteConfig } from "@/config/site";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Me",
+  description: "Information about me",
+};
 
 export default async function AboutPage() {
   return (
@@ -18,16 +24,14 @@ export default async function AboutPage() {
             <AvatarImage src="/avatar.png" alt={siteConfig.author} />
             <AvatarFallback>kay_wu</AvatarFallback>
           </Avatar>
-            <h2 className="text-2xl font-bold text-center break-words">
-              {siteConfig.author}
-            </h2>
-            <p className="text-muted-foreground text-center break-words">
-              System Engineer <br/> Lab Administrator
-            </p>
+          <h2 className="text-2xl font-bold text-center break-words">
+            {siteConfig.author}
+          </h2>
+          <p className="text-muted-foreground text-center break-words">
+            System Engineer <br /> Lab Administrator
+          </p>
         </div>
-        <p className="text-muted-foreground text-lg py-4">
-          Introduce
-        </p>
+        <p className="text-muted-foreground text-lg py-4">Introduce</p>
       </div>
     </div>
   );
