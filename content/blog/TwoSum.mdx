@@ -1,0 +1,72 @@
+---
+title: Two Sum
+description: 'Given an array of integers nums and an integer target, return *indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.'
+date: 2024-08-02
+published: true
+---
+
+Given an array of integers `nums` and an integer `target`, return *indices of the two numbers such that they add up to `target`*.
+
+You may assume that each input would have ***exactly\* one solution**, and you may not use the *same* element twice.
+
+You can return the answer in any order.
+
+ 
+
+**Example 1:**
+
+```javascript
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+```
+
+**Example 2:**
+
+```javascript
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+```
+
+**Example 3:**
+
+```javascript
+Input: nums = [3,3], target = 6
+Output: [0,1]
+```
+
+**JavaScript**
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+
+var twoSum = function(nums, target) {
+    for(let i =0; i< nums.length; i++){
+        for(let j =i+1; j< nums.length; j++){
+            if(nums[i]+ nums[j] === target) return [i, j]
+        }
+    }
+};
+// 1.創建一個空的Map 
+// 2.遍歷List中的數字，並扣掉target獲得的diff
+// 2.判斷Map裡面是否擁有diff，有的話就return[目前遍歷的數字的順序, Map內數字的key]
+// 3.將當前的順序作為key, value作為pairs
+
+// 如果沒有在Map裏面就把現在的value跟位置加入Map，直到找到為止
+const twoSum = function(nums, target) {
+    let mp = new Map()
+    console.log(mp);
+    for (let i =0; i < nums.length; i++){
+        let diff = target - nums[i]
+        
+        if (mp.has(diff)) return [i,mp.get(diff)]
+        mp.set(nums[i],i)
+    }
+};
+
+```
+

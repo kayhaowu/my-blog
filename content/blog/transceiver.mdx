@@ -1,0 +1,61 @@
+
+---
+title: "Transceiver Spec"
+description: SR8, DR4, FR4, LR4
+date: 2024-08-02
+published: true
+---
+
+# Introduction to the common specifications of optical modules - 400G Optical Transceiver
+
+| SPEC | Transmitter            | Receiver | Optical Connector            | WaveLength | Fiber Mode | Max Distance | Signal Format | Baud-Rate/Fiber |
+| ---- | ---------------------- | -------- | ---------------------------- | ---------- | ---------- | ------------ | ------------- | --------------- |
+| SR8  | VCSEL                  | PIN      | MTP/MPO-16<br />MTP/MPO-12x2 | 850nm      | MMF        | 100m         | PAM4          | 26.6G           |
+| DR4  | DFB(SiPh)              | PIN      | MPO12/APC                    | 1310nm     | SMF        | 500m         | PAM4          | 53.2G           |
+| FR8  | LWDM EML<br />LWDM DF8 | PIN      | LC Duplex                    | 1310nm     | SMF        | 2km          | PAM4          | 26.6G           |
+| LR8  | LWDM EML<br />LWDM DFB | PIN      | LC Duplex                    | 1310nm     | SMF        | 10km         | PAM4          | 26.6G           |
+| FR4  | CWDM EML               | PIN      | LC Duplex                    | 1310nm     | SMF        | 2km          | PAM4          | 53.2G           |
+| LR4  | CWDM EML               | PIN      | LC Duplex                    | 1310nm     | SMF        | 10km         | PAM4          | 53.2G           |
+
+## SR8
+
+- SPEC：<font color='red'>**S**</font>R<font color='red'>**8**</font>, Short Reach 8 Channel, Short-distance transmission of <font color='red'>**8**</font> channels
+- MAX. Distance：Optical fiber transmission with a maximum specification of <font color="red">**100M**</font>
+- Fiber Mode：Because the transmission distance is not long, the dispersion effect and the loss of optical fiber are not so obvious. It can be transmitted in a simple multi-mode.
+- Wavelength：It is almost complementary to the mode, and the dispersion and optical fiber loss tolerance are large, so <font color="red">**850 nm**</font> can be used for transmission, and this wavelength transmission can also be used with cheaper and simple **VCSEL**.
+- Transmitter：It is almost complementary to the mode. In the application of multi-mode, mature <font color='red'>**VCSEL**</font> is the best choice.
+- Receiver：It is usually a common <font color='red'>**PIN**</font> structure.
+- Optical Connector：There are a total of <font color='red'>**8 in and 8 out**</font> transmissions, so more than 16 channels of optical joints are required to be responsible for transmission. Commonly, single-row <font color='red'>**MPO/MTP16**</font> or double-row <font color='red'>**MPO/MTP12x2**</font>
+- Signal Format： Among all the specifications of 400G, the signal format of <font color="red">**PAM4**</font> is already the only solution. In the same bandwidth, it has twice the ability to transmit data.
+- Baud-Rate/Fiber：The transmission rate of each optical fiber: Each optical fiber is responsible for the transmission of <font color='red'>**26.6G baud Rate**</font>. Because it is a signal of PAM4, the transmission rate is twice the baud rate = <font color='red'>**53.2 Gbps**</font>. Therefore, there is **53.2 x 8** = **425.6 Gbps** sending and receiving under this specification.
+
+## DR4
+
+- SPEC：**D** is the code name of single-mode optical fiber transmitted in parallel.
+- MAX. Distance： <font color='red'>**500M**</font> optical fiber transmission
+- Fiber Mode：In the specification of 400G, the transmission optical fiber loss and dispersion of more than 500M will affect the transmission, so the <font color="red">**single-mode optical fiber**</font>> transmission must be applied.
+- WaveLength：The wavelength of <font color="red">**1310 nm**</font> has the advantage of almost 0 dispersion, so the single-mode +**1310 nm** optical fiber is the biggest application.
+- Transmitter：In response to the higher frequency and single-mode application of <font color="red">**DFB**</font>, the edge-emitting laser is responsible for the sending end. In addition, the technology of silicon photon (<font color="red">**SiPh**</font>) has also been applied to this specification.
+- Receiver：It is usually a common <font color='red'>**PIN**</font> structure.
+- Optical Connector：There are a total of <font color="red">**4 in and 4 out**</font> transmission, so more than <font color='red'>**8 channels**</font> of optical connectors are required to be responsible for transmission. <font color='red'>**MPO/MTP 12**</font> is applied to this specification. Note that the 8-in-8-out transmission method can also be used in this specification, which is easier to achieve in the optical module itself. However, in contrast, the price of 500M optical fiber is already huge in the whole system architecture. Therefore, if you can replace 8-in-8-out 16 optical fibers with 4-in-4-out 8 optical fibers, the cost will be greatly reduced.
+- Singnal Format：Among all the specifications of 400G, the signal format of <font color="red">**PAM4**</font> is already the only solution. In the same bandwidth, it has twice the ability to transmit data.
+- Baud-Rate/Fiber：The transmission rate of each optical fiber: Each optical fiber is responsible for the transmission of <font color='red'>**53.2G baud Rate**</font>. Because it is a signal of PAM4, the transmission rate is twice the baud rate = <font color='red'>**106.4 Gbps**</font>. Therefore, there is **106.4 x 4** = **425.6 Gbps** sending and receiving under this specification.
+
+## LR8 & FR8
+
+- SPEC：**F**R**8**, **F** stands for **2km** of optical fiber. **L**R**8**, **L** represents the long-distance transmission of 10km.
+- MAX. Distance：The FR8 specification is a maximum of **2 kM** optical fiber transmission. The LR8 specification is a maximum of **10 kM** optical fiber transmission.
+- Fiber Mode：In the specification of 400G, the transmission optical fiber loss and dispersion of more than 500M will affect the transmission, so the <font color="red">**single-mode optical fiber**</font>> transmission must be applied.
+- Wavelength：The wavelength of <font color="red">**1310 nm**</font> has the advantage of almost 0 dispersion, so the single-mode +**1310 nm** optical fiber is the biggest application.
+- Transmitter：**DFB** or **EML** are common solutions for longer-distance transmission side-shots. **LWDM** is responsible for multitasking at different wavelengths.
+- Receiver：It is usually a common <font color='red'>**PIN**</font> structure.
+- Optical Connector：There are a total of <font color='red'>**1 in and 1 out**</font> transmission, so more than <font color='red'>**2 channels**</font> of optical joints are required for transmission. DUAL-LC (LC duplex) can be applied to this specification.
+- Signal Format：Among all the specifications of 400G, the signal format of <font color="red">**PAM4**</font> is already the only solution. In the same bandwidth, it has twice the ability to transmit data.
+- Baud-Rate/Fiber：Each optical fiber is responsible for <font color='red'>**8**</font> wavelengths, and each wavelength is transmitted at <font color='red'>**26.6G baud Rate**</font>. Because it is a signal of PAM4, the transmission rate is twice the **baud rate** = <font color='red'>**53.2 Gbps**</font>. Therefore, there is <font color='red'>**53.2 x 8**</font> = **425.6 Gbps** sending and receiving under this specification.
+
+# Reference
+
+1. [400G Optical Transceiver 光模塊常見規格簡介](https://www.drflyout.com/post/400g-optical-transceiver-spec)
+2. [傳輸線基本規格簡述](https://www.drflyout.com/post/highspeedcable)
+3. [光纖通訊簡介、光纖的特性介紹](https://www.drflyout.com/post/fiberoptics)
+
