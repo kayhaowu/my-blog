@@ -3,6 +3,7 @@ import * as runtime from "react/jsx-runtime";
 import { cn } from "@/lib/utils";
 import { Callout } from "./callout";
 import Pre from "./Pre";
+import { CustomImage } from "./CustomImage";
 
 const useMDXComponent = (code: string) => {
   const fn = new Function(code);
@@ -11,14 +12,9 @@ const useMDXComponent = (code: string) => {
 
 const components = {
   Image,
+  CustomImage,
   Callout,
-  pre: Pre
-  // pre: (props: any) => (
-  //   <div className="flex flex-row gap-2 bg-[#0d1117]">
-  //     <div className="w-full">{props.children}</div>
-  //     <Pre {...props} />
-  //   </div>
-  // ),
+  pre: Pre,
 };
 
 interface MdxProps {

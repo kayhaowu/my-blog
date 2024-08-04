@@ -8,6 +8,7 @@ import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
 import { Icons } from "./icons";
 import { siteConfig } from "@/config/site";
+import Image from "next/image";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,13 @@ export function MobileNav() {
           href="/"
           className="flex items-center"
         >
-          <Icons.logo className="mr-2 h-4 w-4" />
+          <Image
+          src="/white.png"
+          alt="Logo"
+          width={24} 
+          height={24}
+          className="mr-2"  
+        />
           <span className="font-bold">{siteConfig.name}</span>
         </MobileLink>
         <div className="flex flex-col gap-3 mt-3">
