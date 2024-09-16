@@ -4,6 +4,9 @@ import { cn } from "@/lib/utils";
 import { Callout } from "./callout";
 import Pre from "./Pre";
 import { CustomImage } from "./CustomImage";
+import ComparisonTable from "./ComparisonTable";
+import IPv6AddressTable from "./IPv6AddressTable";
+import IPv6ConfigTable from "./IPv6ConfigTable";
 
 const useMDXComponent = (code: string) => {
   const fn = new Function(code);
@@ -15,6 +18,9 @@ const components = {
   CustomImage,
   Callout,
   pre: Pre,
+  ComparisonTable, 
+  IPv6AddressTable,
+  IPv6ConfigTable,
 };
 
 interface MdxProps {
