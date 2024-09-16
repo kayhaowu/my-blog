@@ -2,6 +2,8 @@ import { defineConfig, defineCollection, s } from "velite";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
 
 const computeFilelds = <T extends { slug: string }>(data: T) => ({
   ...data,
@@ -34,16 +36,21 @@ export default defineConfig({
   },
   collections: { posts },
   mdx: {
-    rehypePlugins: [rehypeSlug, [rehypePrettyCode, { theme: "github-dark" }],[
-      rehypeAutolinkHeadings,
-      {
-        behavior: "wrap",
-        properties: {
-          className: ["subheading-anchor"],
-          ariaLabel: "Link to section",
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypePrettyCode, { theme: "github-dark" }],
+      rehypeKatex,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "wrap",
+          properties: {
+            className: ["subheading-anchor"],
+            ariaLabel: "Link to section",
+          },
         },
-      },
-    ],],
-    remarkPlugins: [],
+      ],
+    ],
+    remarkPlugins: [remarkMath],
   },
 });
