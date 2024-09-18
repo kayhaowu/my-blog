@@ -20,15 +20,15 @@ ChartJS.register(
   Legend
 );
 
-export default function StockChart({ data, market }) {
+export default function StockChart({ data, market }: { data: any, market: any }) {
   if (!data || !data.financialData || data.financialData.length === 0) {
     return <div>No data available</div>;
   }
 
-  const years = data.financialData.map((item) => item.date);
-  const volumes = data.financialData.map((item) => item.volume);
-  const prices = data.financialData.map((item) => item.price);
-  const marketCaps = data.financialData.map((item) => item.marketCap);
+  const years = data.financialData.map((item: any) => item.date);
+  const volumes = data.financialData.map((item: any) => item.volume);
+  const prices = data.financialData.map((item: any) => item.price);
+  const marketCaps = data.financialData.map((item: any) => item.marketCap);
 
   const chartData = {
     labels: years,
@@ -64,7 +64,7 @@ export default function StockChart({ data, market }) {
     },
   };
 
-  const formatNumber = (num) => {
+  const formatNumber = (num: any) => {
     if (num === undefined || num === null || isNaN(num)) {
       return 'N/A';
     }
@@ -102,7 +102,7 @@ export default function StockChart({ data, market }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {years.map((year, index) => (
+            {years.map((year: any, index: any) => (
               <tr key={year}>
                 <td className="px-4 py-2 text-sm text-gray-900">{year}</td>
                 <td className="px-4 py-2 text-sm text-gray-900">

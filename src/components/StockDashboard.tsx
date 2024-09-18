@@ -25,7 +25,7 @@ export default function StockDashboard() {
       } else {
         setError(data.error || 'An error occurred while fetching data');
       }
-    } catch (err) {
+    } catch (err: any) {
       setError('Failed to fetch stock data: ' + (err.message || 'Unknown error'));
     } finally {
       setIsLoading(false);
