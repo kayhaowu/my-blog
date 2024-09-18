@@ -20,10 +20,10 @@ async function fetchUSStock(symbol: string) {
   
   const currentYear = new Date().getFullYear();
   const financialData = data.historical
-    .filter(item => new Date(item.date).getFullYear() >= currentYear - 5)
-    .reduce((acc, item) => {
+    .filter((item: any) => new Date(item.date).getFullYear() >= currentYear - 5)
+    .reduce((acc: any[], item: any) => {
       const year = new Date(item.date).getFullYear();
-      if (!acc.some(d => d.date === year.toString())) {
+      if (!acc.some((d: any) => d.date === year.toString())) {
         acc.push({
           date: year.toString(),
           volume: parseInt(item.volume),
@@ -33,7 +33,7 @@ async function fetchUSStock(symbol: string) {
       }
       return acc;
     }, [])
-    .sort((a, b) => parseInt(b.date) - parseInt(a.date))
+    .sort((a: any, b: any) => parseInt(b.date) - parseInt(a.date))
     .slice(0, 5);
 
   console.log('Processed financial data:', financialData); // 添加這行來檢查處理後的數據
@@ -54,7 +54,7 @@ async function fetchTWStock(symbol: string) {
     const quotes = result.indicators.quote[0];
     const adjclose = result.indicators.adjclose[0].adjclose;
 
-    const financialData = timestamps.map((timestamp, index) => ({
+    const financialData = timestamps.map((timestamp: any, index: any) => ({
       date: new Date(timestamp * 1000).getFullYear().toString(),
       volume: quotes.volume[index],
       price: adjclose[index],
@@ -93,6 +93,6 @@ export async function GET(request: Request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching stock data:', error);
-    return NextResponse.json({ error: `Failed to fetch stock data: ${error.message}` }, { status: 500 });
+    return NextResponse.json({ error: `Failed to fetch stock data: ${error}` }, { status: 500 });
   }
 }
