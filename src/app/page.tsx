@@ -1,12 +1,19 @@
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { cn, sortPosts } from "@/lib/utils";
-import { posts } from "#site/content";
+import { posts } from "#site/content"; // Content from Velite
 import Link from "next/link";
 import { PostItem } from "@/components/post-item";
+import type { Metadata } from "next"; // Added for Metadata
+
+// Metadata for the Home page
+export const metadata: Metadata = {
+  title: "Home", // This will combine with title.template in layout.tsx
+  description: "Welcome to my blog template. Built using tailwind, shadcn, velite and Nextjs 14.",
+};
 
 export default function Home() {
-  const lastestPosts = sortPosts(posts).slice(0, 5);
+  const latestPosts = sortPosts(posts).slice(0, 5);
   return (
     <>
       <section className="space-y-6 pb-8 pt-6 md:pb-12 md:mt-10 lg:py-32">
@@ -18,7 +25,7 @@ export default function Home() {
             Welcome to my blog template. Built using tailwind, shadcn, velite
             and Nextjs 14.
           </p>
-          <div className="flex flex-clo gap-4 justify-center sm:flex-row">
+          <div className="flex flex-col gap-4 justify-center sm:flex-row"> {/* Corrected flex-clo to flex-col */}
             <Link
               href="/blog"
               className={cn(buttonVariants({ size: "lg" }), "w-full sm:w-fit")}
@@ -39,18 +46,19 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="container max-w-4xl py-6 lg:py-10 flex flex-col space-y-6 mt-60">
+      <section className="container max-w-4xl py-6 lg:py-10 flex flex-col space-y-6 mt-60"> {/* Consider reducing mt-60 if it's too large */}
         <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-center">
           Latest Posts
         </h2>
         <ul className="flex flex-col">
-          {lastestPosts.map((post) => (
+          {latestPosts.map((post) => (
             <li key={post.slug} className="first:border-t first:border-border">
               <PostItem
                 slug={post.slug}
                 title={post.title}
-                description={post.description}
+                description={post.description} // Ensure PostItem uses this
                 date={post.date}
+                // tags={post.tags} // If your PostItem and post data support tags
               />
             </li>
           ))}
