@@ -4,6 +4,10 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
+import { toString } from "mdast-util-to-string";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkMdx from "remark-mdx";
 
 const computeFilelds = <T extends { slug: string }>(data: T) => ({
   ...data,
@@ -20,11 +24,27 @@ const posts = defineCollection({
       description: s.string().max(999).optional(),
       date: s.isodate(),
       published: s.boolean().default(true),
-      categories: s.array(s.string()).optional(), 
+      categories: s.array(s.string()).optional(),
       tags: s.array(s.string()).optional(),
-      body: s.mdx(),
+      body: s.mdx(), // This is the raw MDX string
+      // readingTime: s.number().optional(), // This will be calculated in transform
     })
-    .transform(computeFilelds),
+    .transform((data) => {
+      // Parse the MDX content to an AST
+      const tree = unified()
+        .use(remarkParse)
+        .use(remarkMdx)
+        .parse(data.body);
+      // Convert the AST to plain text
+      const textContent = toString(tree);
+      const wordCount = textContent.split(/\s+/).filter(Boolean).length;
+      const minutes = Math.ceil(wordCount / 200); // Average reading speed: 200 WPM
+      return {
+        ...computeFilelds(data),
+        // body: data.body, // Ensure body is still part of the transformed data if needed by other parts
+        readingTime: minutes,
+      };
+    }),
 });
 
 export default defineConfig({
