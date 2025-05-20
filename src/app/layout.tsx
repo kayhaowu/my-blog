@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "katex/dist/katex.min.css"; // Add this line to import KaTeX CSS
 
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/site-header";

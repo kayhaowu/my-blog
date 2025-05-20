@@ -1,6 +1,8 @@
 import { posts } from "#site/content";
 import { MDXContent } from "@/components/mdx-components";
+import GiscusComments from "@/components/giscus-comments";
 import { notFound } from "next/navigation";
+import { giscusConfig } from "@/config/giscus"; // Import Giscus config
 
 import "@/styles/mdx.css";
 import { Metadata } from "next";
@@ -108,6 +110,18 @@ export default async function PostPage({ params }: PostPageProps) {
       </div>
       <hr className="my-4" />
       <MDXContent code={post.body} />
+      <hr className="my-8" /> {/* Add a separator before comments */}
+      <GiscusComments
+        repo={giscusConfig.repo}
+        repoId={giscusConfig.repoId}
+        category={giscusConfig.category}
+        categoryId={giscusConfig.categoryId}
+        mapping={giscusConfig.mapping}
+        reactionsEnabled={giscusConfig.reactionsEnabled}
+        emitMetadata={giscusConfig.emitMetadata}
+        inputPosition={giscusConfig.inputPosition}
+        lang={giscusConfig.lang}
+      />
     </article>
   );
 }
