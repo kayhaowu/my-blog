@@ -8,12 +8,11 @@ interface PostItemProps {
   title: string;
   description?: string;
   date: string;
-  readingTime?: number; // Added readingTime prop
   categories?: string[]; // Added categories prop
   tags?: string[]; // Refined tags prop type
 }
 
-export function PostItem({ slug, title, description, date, readingTime, categories, tags }: PostItemProps) {
+export function PostItem({ slug, title, description, date, categories, tags }: PostItemProps) {
   return (
     <article className="flex flex-col gap-2 border-border border-b py-3">
       <div>
@@ -51,7 +50,6 @@ export function PostItem({ slug, title, description, date, readingTime, categori
           <dd className="text-sm sm:text-base font-medium flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             <time dateTime={date}>{formatDate(date)}</time>
-            {readingTime && <span>· {readingTime} min read</span>} {/* Display reading time if it exists */}
           </dd>
         </dl>
         <Link

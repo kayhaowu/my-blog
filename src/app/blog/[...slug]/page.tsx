@@ -9,8 +9,7 @@ import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { cn, formatDate } from "@/lib/utils"; // Added formatDate
-import { Icons } from "@/components/icons";
+import { cn } from "@/lib/utils";
 
 interface PostPageProps {
   params: {
@@ -83,10 +82,6 @@ export default async function PostPage({ params }: PostPageProps) {
       {post.description ? (
         <p className="text-xl mt-0 text-muted-foreground">{post.description}</p>
       ) : null}
-      <div className="flex items-center space-x-2 text-sm text-muted-foreground mt-2 mb-4">
-        <time dateTime={post.date}>{formatDate(post.date)}</time>
-        {post.readingTime && <span>· {post.readingTime} min read</span>}
-      </div>
       <div className="mt-4 flex flex-wrap gap-2">
         {post.categories?.map((category) => (
           <Link
@@ -127,15 +122,6 @@ export default async function PostPage({ params }: PostPageProps) {
         inputPosition={giscusConfig.inputPosition}
         lang={giscusConfig.lang}
       />
-      <div className="flex justify-center py-6 lg:py-10">
-        <Link
-          href="/blog"
-          className={cn(buttonVariants({ variant: "ghost" }))}
-        >
-          <Icons.chevronLeft className="mr-2 h-4 w-4" />
-          See all posts
-        </Link>
-      </div>
     </article>
   );
 }
