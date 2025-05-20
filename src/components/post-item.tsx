@@ -8,9 +8,10 @@ interface PostItemProps {
   title: string;
   description?: string;
   date: string;
+  tags?: any;
 }
 
-export function PostItem({ slug, title, description, date }: PostItemProps) {
+export function PostItem({ slug, title, description, date, tags }: PostItemProps) {
   return (
     <article className="flex flex-col gap-2 border-border border-b py-3">
       <div>
@@ -19,6 +20,18 @@ export function PostItem({ slug, title, description, date }: PostItemProps) {
         </h2>
       </div>
       <div className="max-w-none text-muted-foreground">{description}</div>
+      
+      {/* 顯示標籤, 如果存在的話 */}
+      {tags && tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-1">
+          {tags.map((tag: string) => (
+            <span key={tag} className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-md">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+      
       <div className="flex justify-between items-center">
         <dl>
           <dt className="sr-only">Published On</dt>

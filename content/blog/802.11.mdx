@@ -1,36 +1,65 @@
 ---
-title: IEEE 802.11 標準
-description: 介紹 IEEE 802.11 標準的發展歷程和主要特點
+title: "Evolution of IEEE 802.11 Standards"
+description: "An overview of the development history and key features of the IEEE 802.11 Wi-Fi standards."
 date: 2024-09-17
 published: true
 ---
 
-# IEEE 802.11 無線協議演進
+# The Evolution of IEEE 802.11 Wireless Protocols
 
-IEEE 802.11 是一系列定義無線局域網（WLAN）電腦通信的標準。自 1997 年首次發布以來，
-這些標準已經經歷了多次更新和改進，以滿足不斷增長的無線網絡需求。
+The IEEE 802.11 family of specifications, commonly known as Wi-Fi, defines the standards for Wireless Local Area Networks (WLANs). Since its initial release in 1997, these standards have undergone numerous updates and enhancements to meet the ever-increasing demands for faster, more reliable, and efficient wireless communication. This document outlines the progression of these standards and their key technological advancements.
 
-## 802.11 標準比較表
+## Understanding the IEEE 802.11 Naming
 
-以下表格從舊到新比較了主要的 802.11 標準：
+Each iteration of the IEEE 802.11 standard is designated by one or two letters appended to "802.11" (e.g., 802.11b, 802.11ac). More recently, the Wi-Fi Alliance introduced generational names (e.g., Wi-Fi 4, Wi-Fi 5, Wi-Fi 6) to simplify public understanding.
 
-<IEEE80211Table />
+## 802.11 Standards Comparison Table
 
-## 主要改進
+The following table provides a comparison of the major IEEE 802.11 standards, ordered from oldest to newest:
 
-1. **傳輸速率**：從最初的 2 Mbps 提升到了最新標準的 9.6 Gbps，極大地提高了無線網絡的性能。
+| Standard             | Wi-Fi Generation | Year Released | Frequency Bands (GHz) | Max. Theoretical Data Rate | Key Modulation / Technology                                  | Notable Features                                                                                                |
+| :------------------- | :--------------- | :------------ | :-------------------- | :------------------------- | :----------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| **802.11 (Legacy)** | -                | 1997          | 2.4                   | 2 Mbps                     | FHSS, DSSS                                                   | Foundation standard, basic wireless connectivity.                                                               |
+| **802.11b** | -                | 1999          | 2.4                   | 11 Mbps                    | DSSS, CCK, HR-DSSS                                           | Higher speed than legacy, widespread adoption.                                                                  |
+| **802.11a** | -                | 1999          | 5                     | 54 Mbps                    | OFDM                                                         | Higher speed, less interference (5 GHz band), but shorter range than 802.11b.                                 |
+| **802.11g** | -                | 2003          | 2.4                   | 54 Mbps                    | OFDM, DSSS (for backward compatibility)                      | Combines 802.11a speeds with 802.11b range and compatibility.                                                 |
+| **802.11n** | Wi-Fi 4          | 2009          | 2.4 / 5               | 600 Mbps                   | OFDM, MIMO (Multiple Input, Multiple Output)                 | Introduction of MIMO, channel bonding (up to 40MHz), frame aggregation. Significantly improved throughput.    |
+| **802.11ac** | Wi-Fi 5          | 2013          | 5                     | 6.9 Gbps (Wave 2)          | OFDM, MU-MIMO (Multi-User MIMO), 256-QAM                     | Wider channels (80MHz, 160MHz optional), more spatial streams, beamforming, MU-MIMO (downlink).                 |
+| **802.11ax** | Wi-Fi 6 / Wi-Fi 6E | 2019 / 2021   | 2.4 / 5 / 6 (6E)      | 9.6 Gbps                   | OFDMA (Orthogonal Frequency Division Multiple Access), 1024-QAM, MU-MIMO (uplink & downlink), TWT, BSS Coloring | Improved efficiency in dense environments, better battery life for devices (TWT), Wi-Fi 6E adds 6 GHz band. |
+| **802.11be** | Wi-Fi 7          | Est. 2024-2025| 2.4 / 5 / 6           | ~46 Gbps                   | EHT (Extremely High Throughput), 4096-QAM, MLO (Multi-Link Operation), 320 MHz channels | Focus on extremely high throughput, lower latency, improved reliability via MLO, wider channels.                |
 
-2. **頻段使用**：從單一的 2.4 GHz 頻段擴展到了 2.4 GHz、5 GHz 和 6 GHz 的多頻段使用，
-   提供了更多的頻道選擇和更少的干擾。
+*Note: Max theoretical data rates are often higher than real-world speeds due to overhead, interference, and distance.*
 
-3. **調製技術**：從早期的 FHSS 和 DSSS 發展到 OFDM 和 MIMO 技術，大幅提高了頻譜效率。
+## Key Technological Advancements
 
-4. **網絡容量**：引入了 MU-MIMO 和 OFDMA 等技術，顯著提高了網絡的同時連接能力和效率。
+The evolution of IEEE 802.11 standards has been marked by significant improvements in several key areas:
 
-5. **能源效率**：新標準引入了更先進的節能機制，延長了移動設備的電池壽命。
+1.  **Transmission Speeds:**
+    From the initial 2 Mbps of the legacy 802.11 standard, maximum theoretical data rates have surged. For instance, 802.11n introduced speeds up to 600 Mbps, 802.11ac pushed this to multi-gigabit speeds (e.g., 6.9 Gbps), and 802.11ax (Wi-Fi 6) offers up to 9.6 Gbps. The upcoming 802.11be (Wi-Fi 7) aims for speeds around 46 Gbps. This dramatic increase supports demanding applications like 4K/8K video streaming, online gaming, and AR/VR.
 
-## 結論
+2.  **Frequency Band Utilization:**
+    Initially operating solely in the 2.4 GHz band, which is prone to interference from microwaves and Bluetooth devices, standards expanded to include the 5 GHz band (starting with 802.11a). More recently, 802.11ax (Wi-Fi 6E) and 802.11be (Wi-Fi 7) utilize the 6 GHz band, offering more channels, wider channel bandwidth, and significantly less interference. Multi-Link Operation (MLO) in Wi-Fi 7 allows devices to simultaneously use multiple bands for increased throughput and reliability.
 
-IEEE 802.11 標準的演進反映了無線網絡技術的快速發展。每一代新標準都帶來了顯著的性能提升，
-不僅提高了傳輸速度，還改善了網絡的可靠性、效率和用戶體驗。隨著物聯網和 5G 技術的發展，
-未來的 802.11 標準將繼續演進，以滿足更高的網絡需求。
+3.  **Modulation and Multiplexing Techniques:**
+    Early standards like 802.11b used DSSS (Direct Sequence Spread Spectrum). A major shift occurred with 802.11a/g, which adopted OFDM (Orthogonal Frequency Division Multiplexing), significantly improving spectral efficiency and resilience to multipath interference.
+    * **MIMO (Multiple Input, Multiple Output):** Introduced with 802.11n, MIMO uses multiple antennas to send and receive multiple data streams simultaneously, increasing throughput and range.
+    * **MU-MIMO (Multi-User MIMO):** An enhancement introduced in 802.11ac (downlink) and improved in 802.11ax (uplink and downlink), allowing an access point to communicate with multiple devices simultaneously.
+    * **OFDMA (Orthogonal Frequency Division Multiple Access):** A key feature of 802.11ax, OFDMA allows an access point to divide a Wi-Fi channel into smaller sub-channels (Resource Units or RUs), enabling it to serve multiple clients simultaneously with small data packets. This greatly improves efficiency and reduces latency in dense environments.
+    * **Higher-Order QAM:** Quadrature Amplitude Modulation (QAM) levels have increased, allowing more bits to be transmitted per symbol (e.g., 256-QAM in 802.11ac, 1024-QAM in 802.11ax, and 4096-QAM in 802.11be).
+
+4.  **Network Capacity and Efficiency:**
+    Technologies like MU-MIMO and OFDMA have dramatically increased the number of devices that can be efficiently served by a single access point. BSS (Basic Service Set) Coloring, introduced in 802.11ax, helps mitigate co-channel interference in dense deployments by allowing devices to differentiate between BSSs even if they are on the same channel.
+
+5.  **Energy Efficiency:**
+    Modern standards incorporate advanced power-saving mechanisms. Target Wake Time (TWT), a feature of 802.11ax, allows devices to negotiate when and how often they will wake up to send or receive data. This significantly improves battery life for mobile and IoT devices.
+
+6.  **Security:**
+    Alongside performance enhancements, Wi-Fi security protocols have evolved:
+    * **WEP (Wired Equivalent Privacy):** The original security protocol, now considered insecure and deprecated.
+    * **WPA (Wi-Fi Protected Access):** An interim improvement over WEP.
+    * **WPA2 (Wi-Fi Protected Access II):** Widely adopted, offering strong AES-based encryption.
+    * **WPA3 (Wi-Fi Protected Access III):** The latest standard, providing enhanced security features, including protection against brute-force attacks and individualized data encryption in open networks.
+
+## The Future of Wi-Fi
+
+The IEEE 802.11 standards continue to evolve, driven by the increasing demands of new applications such as high-definition video streaming, cloud computing, the Internet of Things (IoT), and immersive experiences (AR/VR). Each new generation brings substantial performance gains, not just in raw speed, but also in reliability, efficiency, and user experience. As 5G and future cellular technologies expand, Wi-Fi will remain a critical component of the wireless ecosystem, providing high-capacity, cost-effective indoor and local area connectivity. The development of standards like 802.11be (Wi-Fi 7) underscores this continuous innovation, promising even lower latency and higher throughput for the next wave of wireless devices and services.

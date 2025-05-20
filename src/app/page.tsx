@@ -16,7 +16,8 @@ export default function Home() {
   const latestPosts = sortPosts(posts).slice(0, 5);
   return (
     <>
-      <section className="space-y-6 pb-8 pt-6 md:pb-12 md:mt-10 lg:py-32">
+      {/* Hero Section with Gradient Background */}
+      <section className="space-y-6 pb-8 pt-6 md:pb-12 md:mt-10 lg:py-32 bg-gradient-to-r from-blue-400 to-purple-400 text-white">
         <div className="container flex flex-col gap-4 text-center">
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-balance">
             Hello, I&apos;m Kay
@@ -25,40 +26,47 @@ export default function Home() {
             Welcome to my blog template. Built using tailwind, shadcn, velite
             and Nextjs 14.
           </p>
-          <div className="flex flex-col gap-4 justify-center sm:flex-row"> {/* Corrected flex-clo to flex-col */}
+          <div className="flex flex-col gap-4 justify-center sm:flex-row">
             <Link
               href="/blog"
-              className={cn(buttonVariants({ size: "lg" }), "w-full sm:w-fit")}
+              className={cn(buttonVariants({ variant: "outline",size: "lg" }),
+              "w-full sm:w-fit hover:shadow-lg hover:border-blue-500 hover:bg-white hover:text-blue-500",
+              "bg-transparent text-white border-white ")}
             >
               View my blog
             </Link>
+            {/* 修改 GitHub 按鈕的 hover 效果 */}
             <Link
               href={siteConfig.links.github}
               target="_blank"
               rel="noreferrer"
               className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "w-full sm:w-fit"
-              )}
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "w-full sm:w-fit hover:shadow-lg hover:border-blue-500 hover:bg-white hover:text-blue-500",
+              "bg-transparent text-white border-white"
+              )} // 初始為透明底白字白邊，hover 時變白底藍字藍邊
             >
               Github
             </Link>
           </div>
         </div>
       </section>
-      <section className="container max-w-4xl py-6 lg:py-10 flex flex-col space-y-6 mt-60"> {/* Consider reducing mt-60 if it's too large */}
+      {/* Latest Posts Section */}
+      {/* Reduced top margin from mt-60 to mt-24 for better spacing */}
+      <section className="container max-w-4xl py-6 lg:py-10 flex flex-col space-y-6 mt-24">
         <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-center">
           Latest Posts
         </h2>
         <ul className="flex flex-col">
           {latestPosts.map((post) => (
-            <li key={post.slug} className="first:border-t first:border-border">
+            // Added hover effect to list items
+            <li key={post.slug} className="first:border-t first:border-border border-b border-border py-4 hover:bg-muted/50 transition-colors">
               <PostItem
                 slug={post.slug}
                 title={post.title}
                 description={post.description} // Ensure PostItem uses this
                 date={post.date}
-                // tags={post.tags} // If your PostItem and post data support tags
+                // 移除 tags 參數，因為文章數據中沒有這個屬性
               />
             </li>
           ))}
