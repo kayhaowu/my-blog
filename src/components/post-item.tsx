@@ -8,10 +8,11 @@ interface PostItemProps {
   title: string;
   description?: string;
   date: string;
-  tags?: any;
+  categories?: string[]; // Added categories prop
+  tags?: string[]; // Refined tags prop type
 }
 
-export function PostItem({ slug, title, description, date, tags }: PostItemProps) {
+export function PostItem({ slug, title, description, date, categories, tags }: PostItemProps) {
   return (
     <article className="flex flex-col gap-2 border-border border-b py-3">
       <div>
@@ -21,18 +22,29 @@ export function PostItem({ slug, title, description, date, tags }: PostItemProps
       </div>
       <div className="max-w-none text-muted-foreground">{description}</div>
       
-      {/* 顯示標籤, 如果存在的話 */}
+      {/* Display Categories if they exist */}
+      {categories && categories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {categories.map((category) => (
+            <Link key={category} href={`/blog/categories/${category.toLowerCase()}`} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-md hover:bg-primary/20 transition-colors">
+              {category}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Display Tags if they exist */}
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-1">
-          {tags.map((tag: string) => (
-            <span key={tag} className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-md">
+          {tags.map((tag) => (
+            <Link key={tag} href={`/blog/tags/${tag.toLowerCase()}`} className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-md hover:bg-muted/80 transition-colors">
               {tag}
-            </span>
+            </Link>
           ))}
         </div>
       )}
       
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mt-2">
         <dl>
           <dt className="sr-only">Published On</dt>
           <dd className="text-sm sm:text-base font-medium flex items-center gap-1">

@@ -66,7 +66,8 @@ export default function Home() {
                 title={post.title}
                 description={post.description} // Ensure PostItem uses this
                 date={post.date}
-                // 移除 tags 參數，因為文章數據中沒有這個屬性
+                categories={post.categories} // Pass categories to PostItem
+                tags={post.tags} // Pass tags to PostItem
               />
             </li>
           ))}

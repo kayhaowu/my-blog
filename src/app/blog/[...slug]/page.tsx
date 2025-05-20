@@ -5,6 +5,9 @@ import { notFound } from "next/navigation";
 import "@/styles/mdx.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PostPageProps {
   params: {
@@ -77,6 +80,32 @@ export default async function PostPage({ params }: PostPageProps) {
       {post.description ? (
         <p className="text-xl mt-0 text-muted-foreground">{post.description}</p>
       ) : null}
+      <div className="mt-4 flex flex-wrap gap-2">
+        {post.categories?.map((category) => (
+          <Link
+            key={category}
+            href={`/blog/categories/${category}`}
+            className={cn(
+              buttonVariants({ variant: "outline", size: "sm" }),
+              "rounded-full"
+            )}
+          >
+            {category}
+          </Link>
+        ))}
+        {post.tags?.map((tag) => (
+          <Link
+            key={tag}
+            href={`/blog/tags/${tag}`}
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "sm" }),
+              "rounded-full"
+            )}
+          >
+            {tag}
+          </Link>
+        ))}
+      </div>
       <hr className="my-4" />
       <MDXContent code={post.body} />
     </article>
