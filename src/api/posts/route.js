@@ -19,18 +19,18 @@ export const POST = async (req) => {
   try {
     const response = await fetch(url, {
       method: "POST",
-      header: {
-        "Content-type" : "application/json; charset=UTF-8"
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
       },
       body: JSON.stringify({
         userId,
         title,
-        body
-      })
-    })
-    const data = response.json();
-    return NextResponse.json(data)
+        body,
+      }),
+    });
+    const data = await response.json();
+    return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({message: error.message})
+    return NextResponse.json({ message: error.message });
   }
-}
+};
