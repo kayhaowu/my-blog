@@ -5,7 +5,7 @@ import { sortPosts } from "@/lib/utils";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My bolg",
+  title: "My blog",
   description: "This is a description",
 };
 
