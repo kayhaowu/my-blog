@@ -61,7 +61,7 @@ export function SiteHeader() {
                 )}
               >
                 <Icons.linkedin className="h-4 w-4" />
-                <span className="sr-only">Instagram</span>
+                <span className="sr-only">Linkedin</span>
               </div>
             </Link>
             <ModeToggle />
