@@ -46,7 +46,7 @@ export default function Home() {
               "bg-transparent text-white border-white"
               )} // 初始為透明底白字白邊，hover 時變白底藍字藍邊
             >
-              Github
+              GitHub
             </Link>
           </div>
         </div>
