@@ -1,4 +1,4 @@
-import { Calendar } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { cn, formatDate } from "@/lib/utils";
@@ -8,11 +8,12 @@ interface PostItemProps {
   title: string;
   description?: string;
   date: string;
+  readingTime?: number;
   categories?: string[]; // Added categories prop
   tags?: string[]; // Refined tags prop type
 }
 
-export function PostItem({ slug, title, description, date, categories, tags }: PostItemProps) {
+export function PostItem({ slug, title, description, date, readingTime, categories, tags }: PostItemProps) {
   return (
     <article className="flex flex-col gap-2 border-border border-b py-3">
       <div>
@@ -45,13 +46,18 @@ export function PostItem({ slug, title, description, date, categories, tags }: P
       )}
       
       <div className="flex justify-between items-center mt-2">
-        <dl>
-          <dt className="sr-only">Published On</dt>
-          <dd className="text-sm sm:text-base font-medium flex items-center gap-1">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             <time dateTime={date}>{formatDate(date)}</time>
-          </dd>
-        </dl>
+          </div>
+          {readingTime && (
+            <div className="flex items-center gap-1">
+              <Clock className="h-4 w-4" />
+              <span>{readingTime} min read</span>
+            </div>
+          )}
+        </div>
         <Link
           href={slug}
           className={cn(buttonVariants({ variant: "link" }), "py-0")}

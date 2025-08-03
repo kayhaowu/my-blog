@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const latestPosts = sortPosts(posts).slice(0, 5);
+  const featuredPosts = sortPosts(posts.filter(post => post.featured)).slice(0, 3);
   return (
     <>
       {/* Hero Section with Gradient Background */}
@@ -51,6 +52,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Posts Section */}
+      {featuredPosts.length > 0 && (
+        <section className="container max-w-4xl py-6 lg:py-10 flex flex-col space-y-6">
+          <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-center">
+            Featured Posts
+          </h2>
+          <ul className="flex flex-col">
+            {featuredPosts.map((post) => (
+              <li key={post.slug} className="first:border-t first:border-border border-b border-border py-4 hover:bg-muted/50 transition-colors relative">
+                <div className="absolute top-2 right-2 bg-yellow-500 text-yellow-900 text-xs px-2 py-1 rounded-full font-semibold">
+                  Featured
+                </div>
+                <PostItem
+                  slug={post.slug}
+                  title={post.title}
+                  description={post.description}
+                  date={post.date}
+                  readingTime={post.readingTime}
+                  categories={post.categories}
+                  tags={post.tags}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* Latest Posts Section */}
       {/* Reduced top margin from mt-60 to mt-24 for better spacing */}
       <section className="container max-w-4xl py-6 lg:py-10 flex flex-col space-y-6 mt-24">
@@ -66,6 +95,7 @@ export default function Home() {
                 title={post.title}
                 description={post.description} // Ensure PostItem uses this
                 date={post.date}
+                readingTime={post.readingTime}
                 categories={post.categories} // Pass categories to PostItem
                 tags={post.tags} // Pass tags to PostItem
               />

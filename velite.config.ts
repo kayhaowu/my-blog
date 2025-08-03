@@ -5,10 +5,19 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 
-const computeFilelds = <T extends { slug: string }>(data: T) => ({
-  ...data,
-  slugAsParams: data.slug.split("/").slice(1).join("/"),
-});
+const computeFields = <T extends { slug: string; body: string }>(data: T) => {
+  // Calculate reading time (average 200 words per minute)
+  const wordsPerMinute = 200;
+  const wordCount = data.body.split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / wordsPerMinute);
+
+  return {
+    ...data,
+    slugAsParams: data.slug.split("/").slice(1).join("/"),
+    readingTime: readingTime,
+    wordCount: wordCount,
+  };
+};
 
 const posts = defineCollection({
   name: "Post",
@@ -20,11 +29,12 @@ const posts = defineCollection({
       description: s.string().max(999).optional(),
       date: s.isodate(),
       published: s.boolean().default(true),
+      featured: s.boolean().default(false),
       categories: s.array(s.string()).optional(), 
       tags: s.array(s.string()).optional(),
       body: s.mdx(),
     })
-    .transform(computeFilelds),
+    .transform(computeFields),
 });
 
 export default defineConfig({

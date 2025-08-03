@@ -83,6 +83,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 title={post.title}
                 description={post.description}
                 date={post.date}
+                readingTime={post.readingTime}
                 tags={post.tags}
                 categories={post.categories}
               />

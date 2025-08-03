@@ -82,6 +82,7 @@ export default async function TagPage({ params }: TagPageProps) {
                 title={post.title}
                 description={post.description}
                 date={post.date}
+                readingTime={post.readingTime}
                 tags={post.tags}
                 categories={post.categories} // Pass categories if you want to display them here too
               />
