@@ -3,6 +3,7 @@ import { PostItem } from "@/components/post-item";
 import { QueryPagination } from "@/components/query-pagination";
 import { sortPosts } from "@/lib/utils";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "My blog",
@@ -60,7 +61,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       ) : (
         <p>Nothing to see here yet</p>
       )}
-      <QueryPagination totalPages={totalPages} className="justify-end mt-4" />
+      <Suspense>
+        <QueryPagination totalPages={totalPages} className="justify-end mt-4" />
+      </Suspense>
     </div>
   );
 }
