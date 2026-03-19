@@ -1,0 +1,158 @@
+---
+title: "Claude Code Toolkit — Level Up Your CLI Workflow"
+description: "A collection of tools I built to enhance the Claude Code CLI experience: custom status lines, multi-session dashboards, safety hooks, and tmux integration."
+date: 2026-03-19
+published: true
+featured: true
+categories: ["DevOps"]
+tags: ["Claude Code", "CLI", "tmux", "Developer Tools", "Open Source"]
+---
+
+If you're using [Claude Code](https://docs.anthropic.com/en/docs/claude-code) as your daily coding companion, you've probably run into some friction points: How much context have I used? Which model am I on? How do I monitor multiple sessions at once? What if Claude runs a dangerous command?
+
+I built **[Claude Code Toolkit](https://github.com/kayhaowu/claude-code-toolkit)** to solve these problems — a collection of open-source tools that plug into your existing Claude Code CLI setup.
+
+## The Problem
+
+Out of the box, Claude Code is powerful but minimal. You don't get much visibility into:
+
+- **Context usage** — are you about to hit the limit?
+- **Token consumption** — how much have you spent this session?
+- **Multi-session management** — when you're running 3+ Claude instances across projects, switching between terminals is tedious
+- **Safety guardrails** — Claude can run `rm -rf /` if you're not careful
+
+## What's in the Toolkit
+
+### 1. Custom Status Line
+
+A persistent status bar at the bottom of your Claude Code session showing everything you need at a glance:
+
+```
+Opus 4.6 │ [████████░░░░░░░░░░░░] │ 42% │ 85.2k tokens │  main │ my-proj
+```
+
+**Shows:** model name, context usage bar, token count, estimated cost (optional), git branch, and project name.
+
+Install with one command:
+
+```bash
+bash ~/.claude-code-toolkit/statusline/install.sh
+```
+
+### 2. Multi-Instance Dashboard
+
+Running multiple Claude sessions? The terminal dashboard gives you a bird's-eye view:
+
+```
+Claude Code Dashboard  2026-03-03 17:58:58  (every 2s)
+
+PID      PROJECT            MODEL         STATUS    CONTEXT                     CTX%
+------   ----------------   ------------  -------   ------------------------    ----
+730419   sonic_docs         Opus 4.6      WORKING   [████████░░░░░░░░░░░░░░░░]  21%
+582572   laas_agent         Opus 4.6      WORKING   [████████░░░░░░░░░░░░░░░░]  34%
+26983    ubuntu             Opus 4.6      IDLE      [████░░░░░░░░░░░░░░░░░░░░]  14%
+```
+
+Just run:
+
+```bash
+sh ~/.claude/dashboard.sh
+```
+
+### 3. Web Dashboard
+
+For remote monitoring or when you prefer a GUI — a browser-based dashboard with:
+
+- **Session Monitor** — real-time cards showing PID, project, model, tokens, cost, git branch, and status
+- **Web Terminal** — click any session to attach to its tmux window via xterm.js
+
+Deploy it with Docker:
+
+```bash
+cd dashboard && docker compose up -d
+# Open http://127.0.0.1:3141
+```
+
+### 4. Safety Hooks
+
+Pre-built hook scripts that catch dangerous operations before they execute:
+
+| Hook | What it does |
+|------|-------------|
+| `safety-guard` | Blocks `rm -rf /`, `force push`, `DROP TABLE`, etc. |
+| `sensitive-files` | Prevents access to `.env`, credentials, `*.key` files |
+| `auto-format` | Auto-formats files after Claude edits them (prettier/black/gofmt) |
+| `notify-on-stop` | Desktop notification when Claude finishes a task |
+| `context-alert` | Warns when context usage exceeds 80% |
+| `usage-logger` | Logs session usage to `~/.claude/hooks/usage.jsonl` |
+
+Install all recommended hooks:
+
+```bash
+bash hooks/install.sh
+```
+
+### 5. tmux Integration
+
+If you live in tmux, the toolkit integrates natively into your status bar. It auto-detects Catppuccin themes and uses matching colors.
+
+Status detection is **event-driven** via Claude Code hooks — updates are near-instant, not polling-based.
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Claude Code session                                                          │
+│ Opus 4.6 │ [████████░░░░░░░░░░░░] │ 42% │ 85.2k tokens │  main │ my-proj    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Claude: ⚡my-proj 42% │ 💤api-server 18% │ 💤docs 7%                         │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+## 5 Color Themes
+
+Set your preferred theme in `~/.zshrc`:
+
+```bash
+export CLAUDE_STATUSLINE_THEME="catppuccin-mocha"
+```
+
+| Theme | Style |
+|-------|-------|
+| `ansi-default` | Standard terminal colors (4-bit) |
+| `catppuccin-mocha` | Soft pastel, popular dark theme (24-bit) |
+| `dracula` | High-contrast dark (24-bit) |
+| `nord` | Arctic blue tones (24-bit) |
+| `none` | Plain text, no colors |
+
+## Quick Start
+
+One-line install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kayhaowu/claude-code-toolkit/main/install.sh | bash
+```
+
+Then enable what you need:
+
+```bash
+bash ~/.claude-code-toolkit/statusline/install.sh   # Status line + tmux
+bash ~/.claude-code-toolkit/hooks/install.sh         # Safety hooks
+```
+
+Works on macOS, Ubuntu/Debian, and CentOS/RHEL. Uninstall anytime with:
+
+```bash
+bash ~/.claude-code-toolkit/uninstall.sh
+```
+
+## Why I Built This
+
+As a system engineer who runs Claude Code across multiple projects simultaneously — Kubernetes configs, CI/CD pipelines, web apps — I needed better observability into what each session was doing. The default CLI gives you no indication of context consumption until you hit the limit.
+
+The safety hooks came from a real scare: Claude nearly ran a destructive command on a production-adjacent environment. The `safety-guard` hook has saved me multiple times since.
+
+## Links
+
+- **GitHub:** [kayhaowu/claude-code-toolkit](https://github.com/kayhaowu/claude-code-toolkit)
+- **Issues & PRs welcome** — if you have ideas for new hooks or dashboard features
+
+If you use Claude Code daily, give it a try. One `curl` command and you'll wonder how you lived without the status line.
