@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm Ink — Light Mode (Parchment) */
+    --background: 36 33% 97%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 36 33% 97%;
+    --secondary: 36 20% 94%;
+    --secondary-foreground: 0 0% 32%;
+    --muted: 36 15% 93%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 25 72% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 15% 87%;
+    --input: 30 15% 87%;
+    --ring: 25 72% 59%;
+    --radius: 0.5rem;
+    --sage: 145 20% 52%;
+    --chart-1: 25 72% 59%;
+    --chart-2: 145 20% 52%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 0 0% 45%;
+  }
+
+  .dark {
+    /* Warm Ink — Dark Mode (Darkroom) */
+    --background: 0 0% 4%;
+    --foreground: 30 12% 90%;
+    --card: 0 0% 7%;
+    --card-foreground: 30 12% 90%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 30 12% 90%;
+    --primary: 30 12% 90%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 63%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 50%;
+    --accent: 25 72% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 25 72% 59%;
+    --sage: 145 20% 45%;
+    --chart-1: 25 72% 59%;
+    --chart-2: 145 20% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Warm-tinted selection */
+  ::selection {
+    background-color: hsl(25 72% 59% / 0.25);
+    color: inherit;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+/* ── Animations ── */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.5s ease-out both;
+}
+
+.animate-reveal {
+  animation: reveal 0.8s ease-out both;
+}
+
+/* Stagger delays — prefixed to avoid Tailwind conflict */
+.stagger-1 { animation-delay: 100ms; }
+.stagger-2 { animation-delay: 200ms; }
+.stagger-3 { animation-delay: 300ms; }
+.stagger-4 { animation-delay: 400ms; }
+.stagger-5 { animation-delay: 500ms; }
+
+/* ── Horizontal rule styling ── */
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(var(--border)),
+    transparent
+  );
+}
+
+/* ── Prose overrides for editorial typography ── */
+@layer components {
+  .prose-editorial {
+    @apply prose dark:prose-invert max-w-none;
+  }
+
+  .prose-editorial :where(h1, h2, h3, h4):not(:where([class~="not-prose"] *)) {
+    font-family: var(--font-display), serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .prose-editorial :where(a):not(:where([class~="not-prose"] *)) {
+    color: hsl(var(--accent));
+    text-decoration-color: hsl(var(--accent) / 0.3);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s;
+  }
+
+  .prose-editorial :where(a):not(:where([class~="not-prose"] *)):hover {
+    text-decoration-color: hsl(var(--accent));
+  }
+
+  .prose-editorial :where(blockquote):not(:where([class~="not-prose"] *)) {
+    border-left-color: hsl(var(--accent));
+    font-family: var(--font-display), serif;
+    font-style: italic;
+  }
+}
