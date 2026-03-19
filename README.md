@@ -1,85 +1,189 @@
-# My Next.js Blog
+# KayBlog
 
-This is a personal blog built with [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), and [Velite](https://velite.js.org/) for content management. It's designed to be a space for sharing thoughts and learnings on web development and other technical topics.
+Personal blog & portfolio built with Next.js 16, Velite, and Tailwind CSS.
 
-## Features
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwindcss)](https://tailwindcss.com/)
+[![Velite](https://img.shields.io/badge/Velite-0.1-orange)](https://velite.js.org/)
 
-- **Blog Posts**: Content is written in MDX and managed by Velite.
-- **Categories & Tags**: Posts can be organized and browsed by categories and tags.
-- **Site Search**: Real-time search functionality to find posts by title or description.
-- **Responsive Design**: Optimized for various screen sizes.
-- **Syntax Highlighting**: Code blocks are styled for readability.
-- **(More features to come!)**
-
-## Getting Started
-
-First, ensure you have Node.js and pnpm (or your preferred package manager) installed.
-
-1. **Clone the repository (if you haven't already):**
-
-   ```bash
-   git clone <your-repository-url>
-   cd my-blog
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   pnpm install
-   ```
-
-3. **Run the development server:**
-
-   ```bash
-   pnpm dev
-   ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Content Management
-
-Blog posts are located in the `content/blog` directory as `.mdx` files. Velite processes these files, and you can define the schema for your posts (including frontmatter like title, description, date, categories, and tags) in `velite.config.ts`.
-
-When you add or modify content, Velite will automatically update the data available to your application during development.
-
-## Key Technologies Used
-
-- **Next.js**: React framework for server-side rendering and static site generation.
-- **React**: JavaScript library for building user interfaces.
-- **TypeScript**: Superset of JavaScript that adds static typing.
-- **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
-- **Velite**: Tool for transforming local content (like MDX/JSON/YAML) into type-safe data layers.
-- **MDX**: Markdown with JSX capabilities, allowing for rich content creation.
-- **Shadcn/ui**: Re-usable components built using Radix UI and Tailwind CSS.
-
-## Project Structure Highlights
-
-- `src/app/`: Main application routes (App Router).
-  - `src/app/blog/`: Blog listing and individual post pages.
-  - `src/app/blog/categories/[category]/`: Dynamic pages for categories.
-  - `src/app/blog/tags/[tag]/`: Dynamic pages for tags.
-- `src/components/`: Reusable React components.
-- `src/config/`: Site configuration files (e.g., `site.ts`).
-- `src/lib/`: Utility functions.
-- `content/blog/`: Location of your MDX blog posts.
-- `velite.config.ts`: Configuration for Velite, defining content schemas.
-- `public/`: Static assets.
-
-## Learn More
-
-To learn more about the core technologies, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Velite Documentation](https://velite.js.org/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [MDX Documentation](https://mdxjs.com/)
-
-## Deployment
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Live:** [my-blog-six-blush.vercel.app](https://my-blog-six-blush.vercel.app)
 
 ---
 
-_This README was last updated on 2025年5月20日._
+## Tech Stack
+
+| Layer | Technology | Role |
+|-------|-----------|------|
+| Framework | Next.js 16 (App Router, Turbopack) | SSR / SSG / API routes |
+| Content | Velite + MDX | Type-safe content pipeline from Markdown |
+| Styling | Tailwind CSS + shadcn/ui | Utility-first CSS + Radix UI primitives |
+| Typography | Fraunces / Plus Jakarta Sans / Fira Code | Display serif / body sans / monospace |
+| 3D | Three.js + React Three Fiber | Animated hero section |
+| Comments | Giscus | GitHub Discussions-powered comments |
+| Math | KaTeX + remark-math | LaTeX equation rendering |
+| Deployment | Vercel | Edge-optimized hosting |
+
+## Getting Started
+
+```bash
+# Clone
+git clone https://github.com/kayhaowu/my-blog.git
+cd my-blog
+
+# Install dependencies
+pnpm install
+
+# Start dev server (http://localhost:3000)
+pnpm dev
+
+# Production build
+pnpm build && pnpm start
+```
+
+**Requirements:** Node.js 18+, pnpm
+
+## Project Structure
+
+```
+├── content/
+│   └── blog/                  # MDX blog posts (Velite source)
+├── public/                    # Static assets (images, fonts)
+├── src/
+│   ├── app/                   # Next.js App Router
+│   │   ├── layout.tsx         #   Root layout (fonts, providers, header/footer)
+│   │   ├── page.tsx           #   Home page (3D hero + featured/latest posts)
+│   │   ├── template.tsx       #   Page transition animation wrapper
+│   │   ├── globals.css        #   CSS variables, animations, prose overrides
+│   │   ├── about/             #   About / portfolio page
+│   │   ├── blog/              #   Blog listing + dynamic post pages
+│   │   │   ├── page.tsx       #     Editorial post list with pagination
+│   │   │   ├── [...slug]/     #     Individual post viewer (MDX + Giscus)
+│   │   │   ├── categories/    #     Filter by category
+│   │   │   └── tags/          #     Filter by tag
+│   │   └── api/
+│   │       └── og/            #   Dynamic OG image generation (Edge)
+│   ├── components/            # React components
+│   │   ├── ui/                #   shadcn/ui (button, card, avatar, sheet, etc.)
+│   │   ├── site-header.tsx    #   Sticky header with search + nav
+│   │   ├── site-footer.tsx    #   Editorial footer
+│   │   ├── post-item.tsx      #   Blog post card
+│   │   ├── search-bar.tsx     #   Real-time post search (useMemo)
+│   │   ├── mdx-components.tsx #   MDX runtime renderer + custom components
+│   │   ├── three-hero.tsx     #   Three.js animated hero background
+│   │   └── ...                #   Nav, pagination, icons, tables, etc.
+│   ├── config/                # Site metadata + Giscus config
+│   ├── lib/                   # Utility functions (cn, formatDate, sortPosts)
+│   └── styles/
+│       └── mdx.css            # Code block + syntax highlighting styles
+├── velite.config.ts           # Content schema & MDX plugin pipeline
+├── tailwind.config.ts         # Theme (colors, fonts, animations)
+└── next.config.mjs            # Velite webpack plugin integration
+```
+
+## Architecture
+
+### Content Pipeline
+
+Blog posts are MDX files in `content/blog/`. [Velite](https://velite.js.org/) processes them at build time into type-safe data accessible via `#site/content`.
+
+```
+content/blog/*.mdx
+       │
+       ▼
+  ┌──────────┐     remark-math        rehype-slug
+  │  Velite   │ ──► rehype-katex   ──► rehype-pretty-code ──► rehype-autolink
+  └──────────┘     (LaTeX)            (syntax highlight)      (anchor links)
+       │
+       ▼
+  .velite/         ← TypeScript types + compiled MDX
+  public/static/   ← Processed images/assets
+```
+
+Each post has a schema-validated frontmatter:
+
+```yaml
+title: "Post Title"
+description: "Optional description"
+date: 2024-01-15
+published: true
+featured: false
+categories: ["DevOps"]
+tags: ["Kubernetes", "Docker"]
+```
+
+Velite computes `readingTime`, `wordCount`, and `slugAsParams` automatically.
+
+### App Router Structure
+
+All pages use React Server Components by default. Client components (`"use client"`) are limited to interactive elements: search bar, navigation, theme toggle, Three.js hero, and Giscus comments.
+
+- **Static pages** (`/`, `/about`, `/blog`) — pre-rendered at build time
+- **SSG pages** (`/blog/[slug]`, `/blog/categories/[cat]`, `/blog/tags/[tag]`) — generated via `generateStaticParams()`
+- **Dynamic routes** (`/api/og`) — Edge Runtime for OG image generation
+
+### Design System — "Warm Ink"
+
+An editorial theme with warm tones and serif display typography.
+
+**Fonts:**
+- **Display:** Fraunces (soft serif for headings)
+- **Body:** Plus Jakarta Sans (geometric sans)
+- **Mono:** Fira Code (code blocks + metadata)
+
+**Colors (CSS variables in `globals.css`):**
+- Light mode: warm ivory `#faf7f2` background, near-black text
+- Dark mode: near-black `#0a0a0a` background, warm off-white text
+- Accent: terracotta copper `hsl(25 72% 59%)`
+- Tags: sage green `hsl(145 20% 52%)`
+
+**Components:** Built on [shadcn/ui](https://ui.shadcn.com/) (Radix UI + Tailwind). Button, Card, Avatar, Sheet, Dropdown, Pagination, and Input.
+
+## Writing a New Post
+
+1. Create a new `.mdx` file in `content/blog/`:
+
+```bash
+touch content/blog/my-new-post.mdx
+```
+
+2. Add frontmatter:
+
+```mdx
+---
+title: "My New Post"
+description: "A short description for SEO and previews"
+date: 2024-03-19
+published: true
+featured: false
+categories: ["DevOps"]
+tags: ["Kubernetes"]
+---
+
+Your content here. Supports **Markdown**, `code blocks`,
+LaTeX math ($E = mc^2$), and custom components like:
+
+<Callout type="warning">
+  This is a warning callout.
+</Callout>
+```
+
+3. Run `pnpm dev` — Velite auto-rebuilds and the post appears on the site.
+
+**Available MDX components:** `Callout`, `CustomImage`, `ComparisonTable`, `IPv6AddressTable`, `IPv6ConfigTable`, `IEEE80211Table`
+
+## Deployment
+
+The site is deployed on [Vercel](https://vercel.com/). Push to `main` triggers automatic deployment.
+
+**Environment variables** (set in Vercel dashboard):
+- `NEXT_PUBLIC_APP_URL` — Production URL for metadata
+
+**One-click deploy:**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kayhaowu/my-blog)
+
+## License
+
+MIT
