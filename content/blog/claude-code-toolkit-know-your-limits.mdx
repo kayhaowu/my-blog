@@ -1,0 +1,135 @@
+---
+title: "Claude Code Toolkit — Know Your Limits"
+description: "The v2 statusline introduces a fully configurable widget system and real-time rate limit tracking — so you always know exactly where you stand before Claude goes silent."
+date: 2026-03-21
+published: true
+featured: true
+categories: ["DevOps"]
+tags: ["Claude Code", "CLI", "Developer Tools", "Open Source"]
+---
+
+In my [last post](/blog/claude-code-toolkit), I introduced **Claude Code Toolkit** — a set of tools that add observability and safety to the Claude Code CLI. Since then, the toolkit has gone through a major upgrade. The `v1.0.0-rc.2` release rewrites the status line from scratch and adds something I've wanted for a long time: **real-time rate limit tracking**.
+
+## The Missing Signal
+
+If you've been using Claude Code on a Pro or Max plan, you know the feeling: you're deep in a multi-file refactor, Claude is humming along, and then — nothing. You've hit your rate limit. No warning, no countdown, just silence.
+
+The original status line showed context usage and token counts, which helped with context window management. But rate limits were a blind spot. You had no idea how much of your 5-hour or 7-day quota you'd burned through until it was too late.
+
+## Widget System (v2.0)
+
+Before tackling rate limits, the status line needed a structural change. The v1 layout was hardcoded — model, bar, context %, tokens, git branch, project. Useful, but inflexible. What if you don't care about cost but want to see session duration? What if you want a two-line display?
+
+The v2 rewrite introduces a **widget-based architecture**. Each piece of information is an independent widget that you can enable, disable, and reorder:
+
+| Widget | Description | Example |
+|--------|-------------|---------|
+| `model` | Model name | `Opus 4.6` |
+| `bar` | Context progress bar | `[████████░░░░░░░░░░░░]` |
+| `ctx` | Context usage percentage | `42%` |
+| `tokens` | Token count | `85.2k tokens` |
+| `cost` | Session cost | `$11.01` |
+| `duration` | Session duration | `4h47m` |
+| `lines` | Lines changed | `+538/-47` |
+| `alert` | 200k token warning | `⚠ 200k` |
+| `git` | Git branch name | ` main` |
+| `project` | Project name | `my-project` |
+| `version` | Claude Code version | `v2.1.76` |
+| `vim` | Vim mode indicator | `[NORMAL]` |
+| `rate5h` | 5-hour rate limit | `5h ●●○○○ 42% 2h31m` |
+| `rate7d` | 7-day rate limit | `7d ●●●●○ 85% 1d3h` |
+| `rate` | Combined rate view | Both windows in one |
+
+Widgets support **two-line display** — assign widgets to Line 1 and Line 2 independently. Configuration is saved to `~/.claude/statusline-widgets.conf`.
+
+### Interactive Configurator
+
+Don't want to edit config files by hand? Run the interactive configurator:
+
+```bash
+bash ~/.claude/configure.sh
+```
+
+It walks you through selecting widgets, assigning them to lines, and previewing the result — all from your terminal.
+
+Under the hood, the v2 rewrite also consolidated all JSON parsing into a **single `jq` call**, improving performance on every status line refresh.
+
+## Rate Limit Widgets
+
+This is the headline feature. Three new widgets give you real-time visibility into your Claude Code rate limits:
+
+### `rate5h` — 5-Hour Window
+
+```
+5h ●●○○○ 42% 2h31m
+```
+
+Shows your usage within the current 5-hour sliding window. The dot bar gives you an at-a-glance sense of consumption. The countdown tells you when the window resets.
+
+### `rate7d` — 7-Day Window
+
+```
+7d ●●●●○ 85% 1d3h
+```
+
+Same format for the 7-day quota. This is the one that catches people off guard — you might be fine on the 5-hour window but dangerously close on the weekly limit.
+
+### `rate` — Combined View
+
+```
+5h ●●○○○ 42% 2h31m │ 7d ●●●●○ 85% 1d3h
+```
+
+Both windows side by side. Each window is colored independently based on its own usage level:
+
+| Usage | Color |
+|-------|-------|
+| ≤ 60% | Green |
+| ≤ 80% | Yellow |
+| ≤ 99% | Red |
+| 100%+ | Bold Red |
+
+The widgets **auto-hide** when `rate_limits` data is absent — so if you're using the API directly instead of a subscription plan, they won't clutter your status line.
+
+### Hardened Parsing
+
+Getting rate limit data to display reliably turned out to be trickier than expected. Claude Code sends `resets_at` as either an ISO 8601 string or an epoch integer depending on the version. The parser handles both formats, plus edge cases like boolean values, missing fields, and string-typed percentages. If the `jq` pipeline fails for any reason, it exits cleanly with an error message instead of blanking the entire status line.
+
+## Other Improvements in rc.2
+
+Beyond widgets and rate limits, this release includes several quality-of-life fixes:
+
+- **One-line installer** — `curl | bash` now auto-installs tmux if missing, deploys TPM + Catppuccin theme, and sets up tmux.conf with diff checking (skip if identical, backup if differs)
+- **`--relink` flag** — moved your toolkit folder? Run `bash hooks/install.sh --relink` or `bash statusline/install.sh --relink` to repair broken symlinks without re-running the full install
+- **Root uninstaller** — `bash ~/.claude-code-toolkit/uninstall.sh` cleanly removes everything with confirmation prompts
+- **tmux catppuccin fix** — corrected the plugin path and added auto-install when the theme is missing, preventing the `"invalid style: fg=,bg="` error on fresh environments
+- **Race condition fix** — tmux plugin install and load now run synchronously via `if-shell` two-branch form, with failure feedback via `display-message`
+
+## Getting the Update
+
+If you already have the toolkit installed:
+
+```bash
+cd ~/.claude-code-toolkit && git pull
+bash statusline/install.sh
+```
+
+Fresh install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kayhaowu/claude-code-toolkit/main/install.sh | bash
+bash ~/.claude-code-toolkit/statusline/install.sh
+```
+
+Then run the widget configurator to add rate limit tracking:
+
+```bash
+bash ~/.claude/configure.sh
+```
+
+## Links
+
+- **GitHub:** [kayhaowu/claude-code-toolkit](https://github.com/kayhaowu/claude-code-toolkit)
+- **Previous post:** [Claude Code Toolkit — Level Up Your CLI Workflow](/blog/claude-code-toolkit)
+
+If you've ever been blindsided by a rate limit mid-session, the `rate` widget alone is worth the upgrade. Now you'll see it coming.
