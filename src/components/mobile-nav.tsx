@@ -4,14 +4,15 @@ import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
-import Link, { LinkProps } from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { Link, useRouter, usePathname } from "@/i18n/navigation";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations("nav");
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -40,7 +41,7 @@ export function MobileNav() {
               pathname === "/blog" ? "text-accent" : "text-foreground"
             )}
           >
-            Blog
+            {t("blog")}
           </MobileLink>
           <MobileLink
             onOpenChange={setOpen}
@@ -50,7 +51,7 @@ export function MobileNav() {
               pathname === "/about" ? "text-accent" : "text-foreground"
             )}
           >
-            About
+            {t("about")}
           </MobileLink>
           <Link
             target="_blank"
@@ -82,7 +83,8 @@ export function MobileNav() {
   );
 }
 
-interface MobileLinkProps extends LinkProps {
+interface MobileLinkProps {
+  href: string;
   children: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
   className?: string;
@@ -93,18 +95,16 @@ function MobileLink({
   onOpenChange,
   children,
   className,
-  ...props
 }: MobileLinkProps) {
   const router = useRouter();
   return (
     <Link
       href={href}
       onClick={() => {
-        router.push(href.toString());
+        router.push(href);
         onOpenChange?.(false);
       }}
       className={className}
-      {...props}
     >
       {children}
     </Link>

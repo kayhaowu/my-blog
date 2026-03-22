@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "blog": "部落格",
+    "about": "關於我"
+  },
+  "home": {
+    "title": "嗨，我是振豪",
+    "subtitle": "歡迎來到我的部落格。使用 Next.js、Tailwind 和 Velite 打造。",
+    "viewBlog": "瀏覽文章",
+    "featuredPosts": "精選文章",
+    "latestPosts": "最新文章",
+    "viewAll": "查看所有文章"
+  },
+  "blog": {
+    "title": "部落格",
+    "description": "關於網頁開發、DevOps 和基礎設施的筆記。",
+    "subtitle": "關於網頁開發和基礎設施的筆記。",
+    "noResults": "目前還沒有文章",
+    "minRead": "分鐘閱讀",
+    "readMore": "繼續閱讀",
+    "categoryTitle": "分類：{name}",
+    "categorySubtitle": "「{name}」分類下的文章。",
+    "categoryEmpty": "「{name}」分類下目前沒有文章。",
+    "tagTitle": "標籤：{name}",
+    "tagSubtitle": "標記「{name}」的文章。",
+    "tagEmpty": "標記「{name}」目前沒有文章。"
+  },
+  "search": {
+    "placeholder": "搜尋文章...",
+    "noResults": "找不到「{query}」的相關結果。"
+  },
+  "pagination": {
+    "previous": "上一頁",
+    "next": "下一頁"
+  },
+  "footer": {
+    "rights": "版權所有。"
+  },
+  "a11y": {
+    "toggleMenu": "切換選單",
+    "toggleTheme": "切換主題"
+  },
+  "theme": {
+    "light": "淺色模式",
+    "dark": "深色模式",
+    "system": "系統偏好"
+  },
+  "about": {
+    "label": "關於我",
+    "role": "鈺登科技 系統工程師",
+    "skills": "技能",
+    "experience": "工作經歷",
+    "projects": "專案",
+    "education": "學歷",
+    "certifications": "證照",
+    "connect": "聯繫我",
+    "connectDesc": "歡迎來信討論 DevOps、基礎設施與軟體工程相關的合作機會。",
+    "emailMe": "寄信給我"
+  },
+  "post": {
+    "readInOtherLang": "Read in English",
+    "publishedOn": "發布於"
+  },
+  "meta": {
+    "siteDescription": "系統工程師 & DevOps — Kubernetes、網路與雲端基礎設施"
+  },
+  "categories": {
+    "DevOps": "開發維運",
+    "Networking": "網路"
+  },
+  "notFound": {
+    "title": "找不到頁面",
+    "description": "您要找的頁面不存在。",
+    "goHome": "回到首頁"
+  }
+}

@@ -2,26 +2,47 @@ import { posts } from "#site/content";
 import { QueryPagination } from "@/components/query-pagination";
 import { formatDate, sortPosts } from "@/lib/utils";
 import { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Suspense } from "react";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "My blog",
-  description: "This is a description",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "blog" });
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      languages: { en: "/en/blog", "zh-Hant": "/zh-TW/blog" },
+    },
+  };
+}
 
 const POSTS_PRE_PAGE = 5;
 
 interface BlogPageProps {
+  params: Promise<{
+    locale: string;
+  }>;
   searchParams: Promise<{
     page?: string;
   }>;
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+export default async function BlogPage({ params, searchParams }: BlogPageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "blog" });
+
   const resolvedParams = await searchParams;
   const currentPage = Number(resolvedParams?.page) || 1;
-  const sortedPosts = sortPosts(posts.filter((post) => post.published));
+  const sortedPosts = sortPosts(
+    posts.filter((post) => post.published && post.locale === locale)
+  );
   const totalPages = Math.ceil(sortedPosts.length / POSTS_PRE_PAGE);
 
   const displayPosts = sortedPosts.slice(
@@ -33,11 +54,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     <div className="container max-w-4xl py-10 lg:py-16">
       <header className="mb-12">
         <h1 className="font-display text-4xl md:text-6xl tracking-tight text-foreground">
-          Blog
+          {t("title")}
         </h1>
         <div className="w-16 h-px bg-accent mt-4" />
         <p className="text-muted-foreground text-lg mt-4">
-          My ramblings on all things web dev.
+          {t("subtitle")}
         </p>
       </header>
 
@@ -51,17 +72,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 className="py-8 animate-fade-in-up"
                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
               >
-                <Link href={`/${slug}`} className="group flex flex-col sm:flex-row gap-4 sm:gap-8">
+                <Link href={`/blog/${post.slugAsParams}`} className="group flex flex-col sm:flex-row gap-4 sm:gap-8">
                   <div className="min-w-[100px] shrink-0">
                     <time
                       dateTime={date}
                       className="text-sm font-mono text-muted-foreground"
                     >
-                      {formatDate(date)}
+                      {formatDate(date, locale)}
                     </time>
                     {readingTime && (
                       <p className="text-xs font-mono text-muted-foreground mt-1">
-                        {readingTime} min read
+                        {readingTime} {t("minRead")}
                       </p>
                     )}
                   </div>
@@ -103,7 +124,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </div>
       ) : (
         <p className="text-center text-muted-foreground py-12">
-          Nothing to see here yet
+          {t("noResults")}
         </p>
       )}
 

@@ -1,0 +1,135 @@
+---
+title: "Claude Code Toolkit — Widget 系統與 Rate Limit 即時追蹤"
+description: "v2 status line 全面改版：可自由配置的 widget 架構，加上即時 rate limit 追蹤——讓你在 Claude 斷線之前，就知道自己還剩多少額度。"
+date: 2026-03-21
+published: true
+featured: true
+categories: ["DevOps"]
+tags: ["Claude Code", "CLI", "Developer Tools", "Open Source"]
+---
+
+在[上一篇文章](/blog/claude-code-toolkit)裡，我介紹了 **Claude Code Toolkit** —— 一套幫 Claude Code CLI 加上可觀測性和安全機制的工具組。上線之後我一直在改，到了 `v1.0.0-rc.2` 這版，整個 status line 基本上是重寫的，而且終於加上了我一直想做的功能：**即時 rate limit 追蹤**。
+
+## 那個缺失的訊號
+
+如果你有在用 Claude Code 的 Pro 或 Max 方案，你一定懂那種感覺：你正在做一個跨好幾個檔案的 refactor，Claude 跑得正順，然後——什麼都沒了。Rate limit 到了。沒有預警、沒有倒數，就是突然不回應。
+
+舊版的 status line 有顯示 context 用量和 token 數，管 context window 大小還算夠用。但 rate limit 完全是個盲區。你的 5 小時或 7 天配額用了多少？不知道。等你發現的時候，已經來不及了。
+
+## Widget 系統（v2.0）
+
+在處理 rate limit 之前，status line 的架構得先改。v1 的排版是寫死的——model、bar、context %、tokens、git branch、project。堪用，但沒彈性。如果你不在乎 cost 但想看 session 跑了多久呢？如果你想要兩行顯示呢？
+
+v2 改成 **widget 架構**。每一個資訊都是獨立的 widget，你可以自由啟用、關閉、排序：
+
+| Widget | 說明 | 範例 |
+|--------|------|------|
+| `model` | 模型名稱 | `Opus 4.6` |
+| `bar` | Context 進度條 | `[████████░░░░░░░░░░░░]` |
+| `ctx` | Context 使用百分比 | `42%` |
+| `tokens` | Token 數量 | `85.2k tokens` |
+| `cost` | Session 花費 | `$11.01` |
+| `duration` | Session 持續時間 | `4h47m` |
+| `lines` | 修改行數 | `+538/-47` |
+| `alert` | 200k token 警告 | `⚠ 200k` |
+| `git` | Git branch 名稱 | ` main` |
+| `project` | 專案名稱 | `my-project` |
+| `version` | Claude Code 版本 | `v2.1.76` |
+| `vim` | Vim mode 指示器 | `[NORMAL]` |
+| `rate5h` | 5 小時 rate limit | `5h ●●○○○ 42% 2h31m` |
+| `rate7d` | 7 天 rate limit | `7d ●●●●○ 85% 1d3h` |
+| `rate` | 合併顯示兩個窗口 | 兩個時間窗口並排 |
+
+Widget 支援**雙行顯示**——Line 1 和 Line 2 可以各自指定不同的 widget 組合。設定會存在 `~/.claude/statusline-widgets.conf`。
+
+### 互動式設定工具
+
+不想手動改設定檔？跑互動式 configurator 就好：
+
+```bash
+bash ~/.claude/configure.sh
+```
+
+它會一步步帶你選 widget、分配到哪一行、預覽結果——全部在終端機裡完成。
+
+底層實作上，v2 也把所有 JSON 解析整合成**一次 `jq` 呼叫**，每次 status line 刷新的效能都有改善。
+
+## Rate Limit Widgets
+
+這是這次更新的重頭戲。三個新 widget 讓你即時掌握 Claude Code 的 rate limit 狀態：
+
+### `rate5h` — 5 小時滑動窗口
+
+```
+5h ●●○○○ 42% 2h31m
+```
+
+顯示你在當前 5 小時滑動窗口內的使用量。圓點條讓你一眼就看出用了多少，倒數計時告訴你窗口什麼時候重置。
+
+### `rate7d` — 7 天窗口
+
+```
+7d ●●●●○ 85% 1d3h
+```
+
+同樣格式，顯示 7 天配額。這個最容易讓人措手不及——你 5 小時窗口可能還很寬裕，但週配額已經快爆了。
+
+### `rate` — 合併顯示
+
+```
+5h ●●○○○ 42% 2h31m │ 7d ●●●●○ 85% 1d3h
+```
+
+兩個窗口並排顯示。每個窗口會根據自己的使用量獨立上色：
+
+| 使用量 | 顏色 |
+|--------|------|
+| ≤ 60% | 綠色 |
+| ≤ 80% | 黃色 |
+| ≤ 99% | 紅色 |
+| 100%+ | 粗體紅色 |
+
+這些 widget 會在 `rate_limits` 資料不存在時**自動隱藏**——所以如果你是用 API 而不是訂閱方案，它們不會佔你的 status line 空間。
+
+### 堅固的解析邏輯
+
+要讓 rate limit 資料穩定顯示，比我預期的難。Claude Code 傳回的 `resets_at` 有時候是 ISO 8601 字串、有時候是 epoch 整數，取決於版本。解析器兩種格式都處理，還有布林值、欄位缺失、百分比是字串型別等各種 edge case。如果 `jq` pipeline 因為任何原因掛掉，它會乾淨地結束並顯示錯誤訊息，而不是讓整個 status line 變空白。
+
+## rc.2 的其他改進
+
+除了 widget 和 rate limit 之外，這版還有幾個生活品質改善：
+
+- **一行安裝** —— `curl | bash` 現在會自動安裝 tmux（如果沒裝的話）、部署 TPM + Catppuccin 主題，並設定 tmux.conf（含 diff 檢查：相同就跳過、不同就備份）
+- **`--relink` 旗標** —— 搬了 toolkit 資料夾？跑 `bash hooks/install.sh --relink` 或 `bash statusline/install.sh --relink` 就能修復壞掉的 symlink，不用重新完整安裝
+- **根目錄解除安裝** —— `bash ~/.claude-code-toolkit/uninstall.sh` 會乾淨地移除所有東西，附確認提示
+- **tmux catppuccin 修正** —— 修正了 plugin 路徑，並在主題缺失時自動安裝，避免全新環境出現 `"invalid style: fg=,bg="` 錯誤
+- **Race condition 修正** —— tmux plugin 的安裝和載入現在透過 `if-shell` 雙分支形式同步執行，失敗時會透過 `display-message` 回報
+
+## 取得更新
+
+如果你已經安裝了 toolkit：
+
+```bash
+cd ~/.claude-code-toolkit && git pull
+bash statusline/install.sh
+```
+
+全新安裝：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kayhaowu/claude-code-toolkit/main/install.sh | bash
+bash ~/.claude-code-toolkit/statusline/install.sh
+```
+
+然後跑 widget configurator 來加上 rate limit 追蹤：
+
+```bash
+bash ~/.claude/configure.sh
+```
+
+## 連結
+
+- **GitHub：** [kayhaowu/claude-code-toolkit](https://github.com/kayhaowu/claude-code-toolkit)
+- **上一篇：** [Claude Code Toolkit — 升級你的 CLI 工作流](/blog/claude-code-toolkit)
+
+如果你曾經在 session 做到一半被 rate limit 突襲，光是 `rate` 這個 widget 就值得你升級。至少下次，你會看到它來。

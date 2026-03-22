@@ -1,9 +1,10 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface QueryPaginationProps {
   totalPages: number;
@@ -16,6 +17,7 @@ export function QueryPagination({
 }: QueryPaginationProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations("pagination");
 
   const currentPage = Number(searchParams?.get("page")) || 1;
 
@@ -43,12 +45,12 @@ export function QueryPagination({
           aria-label="Go to previous page"
         >
           <ChevronLeft className="h-4 w-4" />
-          <span>Previous</span>
+          <span>{t("previous")}</span>
         </Link>
       ) : (
         <span className="inline-flex items-center gap-1 font-mono text-sm text-muted-foreground/40 px-3 py-2 cursor-not-allowed">
           <ChevronLeft className="h-4 w-4" />
-          <span>Previous</span>
+          <span>{t("previous")}</span>
         </span>
       )}
 
@@ -80,12 +82,12 @@ export function QueryPagination({
           className="inline-flex items-center gap-1 font-mono text-sm text-muted-foreground hover:text-accent transition-colors px-3 py-2"
           aria-label="Go to next page"
         >
-          <span>Next</span>
+          <span>{t("next")}</span>
           <ChevronRight className="h-4 w-4" />
         </Link>
       ) : (
         <span className="inline-flex items-center gap-1 font-mono text-sm text-muted-foreground/40 px-3 py-2 cursor-not-allowed">
-          <span>Next</span>
+          <span>{t("next")}</span>
           <ChevronRight className="h-4 w-4" />
         </span>
       )}

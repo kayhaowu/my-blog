@@ -1,16 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { Link, useRouter } from "@/i18n/navigation";
 import { posts } from "#site/content";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
-
-interface Post {
-  title: string;
-  slug: string;
-  description?: string;
-}
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 /**
  * SearchBar component for searching blog posts.
@@ -37,19 +32,22 @@ export function SearchBar() {
   const router = useRouter(); // Get router instance
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const t = useTranslations("search");
+  const locale = useLocale();
 
   const results = useMemo(() => {
     if (query.length <= 1) return [];
     const q = query.toLowerCase();
     return posts.filter(
       (post) =>
-        post.title.toLowerCase().includes(q) ||
-        post.description?.toLowerCase().includes(q)
+        post.locale === locale &&
+        (post.title.toLowerCase().includes(q) ||
+        post.description?.toLowerCase().includes(q))
     );
-  }, [query]);
+  }, [query, locale]);
 
   const handleResultClick = (postSlug: string) => {
-    router.push(`/${postSlug}`);
+    router.push(`/blog/${postSlug}`);
     setQuery("");
   };
 
@@ -61,7 +59,7 @@ export function SearchBar() {
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-        placeholder="Search posts..."
+        placeholder={t("placeholder")}
         className="w-full bg-secondary border-border/50 focus:border-accent focus:ring-accent/20 rounded-md text-sm"
       />
       {isFocused && results.length > 0 && (
@@ -70,11 +68,11 @@ export function SearchBar() {
             {results.map((post) => (
               <li key={post.slug}>
                 <Link
-                  href={`/${post.slug}`}
+                  href={`/blog/${post.slugAsParams}`}
                   className="block px-4 py-3 hover:bg-accent/5 transition-colors"
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    handleResultClick(post.slug);
+                    handleResultClick(post.slugAsParams);
                   }}
                 >
                   <div className="font-medium">{post.title}</div>
@@ -91,7 +89,7 @@ export function SearchBar() {
       )}
       {isFocused && query.length > 1 && results.length === 0 && (
         <div className="absolute z-10 top-full mt-2 w-full bg-card border border-border/50 rounded-lg shadow-xl p-4 text-xs text-muted-foreground text-center">
-          No results found for &quot;{query}&quot;.
+          {t("noResults", { query })}
         </div>
       )}
     </div>

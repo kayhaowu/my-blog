@@ -6,16 +6,22 @@ import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 
 const computeFields = <T extends { slug: string; body: string }>(data: T) => {
-  // Calculate reading time (average 200 words per minute)
   const wordsPerMinute = 200;
   const wordCount = data.body.split(/\s+/).length;
   const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
+  // slug from s.path() = "blog/en/claude-code-toolkit" or "blog/zh-TW/claude-code-toolkit"
+  const parts = data.slug.split("/");
+  // parts[0] = "blog", parts[1] = locale ("en" or "zh-TW"), parts[2+] = actual slug
+  const locale = parts[1];
+  const slugAsParams = parts.slice(2).join("/");
+
   return {
     ...data,
-    slugAsParams: data.slug.split("/").slice(1).join("/"),
-    readingTime: readingTime,
-    wordCount: wordCount,
+    locale,
+    slugAsParams,
+    readingTime,
+    wordCount,
   };
 };
 

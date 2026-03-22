@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "blog": "Blog",
+    "about": "About"
+  },
+  "home": {
+    "title": "Hello, I'm Kay",
+    "subtitle": "Welcome to my blog. Built with Next.js, Tailwind, and Velite.",
+    "viewBlog": "View my blog",
+    "featuredPosts": "Featured Posts",
+    "latestPosts": "Latest Posts",
+    "viewAll": "View all posts"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Thoughts on web development, DevOps, and infrastructure.",
+    "subtitle": "My ramblings on all things web dev.",
+    "noResults": "Nothing to see here yet",
+    "minRead": "min read",
+    "readMore": "Read more",
+    "categoryTitle": "Category: {name}",
+    "categorySubtitle": "Blog posts categorized under \"{name}\".",
+    "categoryEmpty": "No posts found in the category \"{name}\".",
+    "tagTitle": "Tag: {name}",
+    "tagSubtitle": "Blog posts tagged with \"{name}\".",
+    "tagEmpty": "No posts found with the tag \"{name}\"."
+  },
+  "search": {
+    "placeholder": "Search posts...",
+    "noResults": "No results found for \"{query}\"."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "a11y": {
+    "toggleMenu": "Toggle Menu",
+    "toggleTheme": "Toggle Theme"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "about": {
+    "label": "About Me",
+    "role": "System Engineer at Edgecore Networks",
+    "skills": "Skills",
+    "experience": "Experience",
+    "projects": "Projects",
+    "education": "Education",
+    "certifications": "Certifications",
+    "connect": "Let's Connect",
+    "connectDesc": "I'm open to new opportunities in DevOps, infrastructure, and software engineering. Feel free to reach out.",
+    "emailMe": "Email Me"
+  },
+  "post": {
+    "readInOtherLang": "閱讀中文版",
+    "publishedOn": "Published on"
+  },
+  "meta": {
+    "siteDescription": "System Engineer & DevOps — Kubernetes, Networking, and Cloud Infrastructure"
+  },
+  "categories": {
+    "DevOps": "DevOps",
+    "Networking": "Networking"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist.",
+    "goHome": "Go to homepage"
+  }
+}

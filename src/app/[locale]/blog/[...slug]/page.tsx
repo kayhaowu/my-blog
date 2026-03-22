@@ -4,17 +4,20 @@ import GiscusComments from "@/components/giscus-comments";
 import "katex/dist/katex.min.css";
 import { cache, Suspense } from "react";
 import { notFound } from "next/navigation";
-import { giscusConfig } from "@/config/giscus"; // Import Giscus config
+import { giscusConfig } from "@/config/giscus";
 
 import "@/styles/mdx.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { setRequestLocale } from "next-intl/server";
+import { PostLanguageToggle } from "@/components/post-language-toggle";
 
 interface PostPageProps {
   params: Promise<{
+    locale: string;
     slug: string[];
   }>;
 }
@@ -22,7 +25,10 @@ interface PostPageProps {
 const getPostFromParams = cache(async (params: PostPageProps["params"]) => {
   const resolvedParams = await params;
   const slug = resolvedParams?.slug?.join("/");
-  const post = posts.find((post) => post.slugAsParams === slug);
+  const locale = resolvedParams?.locale;
+  const post = posts.find(
+    (post) => post.slugAsParams === slug && post.locale === locale
+  );
 
   return post;
 });
@@ -39,10 +45,27 @@ export async function generateMetadata({
   const ogSearchParams = new URLSearchParams();
   ogSearchParams.set("title", post.title);
 
+  // Build alternates only if a paired post exists in the other locale
+  const pairedPost = posts.find(
+    (p) =>
+      p.slugAsParams === post.slugAsParams &&
+      p.locale !== post.locale &&
+      p.published
+  );
+  const alternates = pairedPost
+    ? {
+        languages: {
+          en: `/en/blog/${post.slugAsParams}`,
+          "zh-Hant": `/zh-TW/blog/${post.slugAsParams}`,
+        },
+      }
+    : undefined;
+
   return {
     title: post.title,
     description: post.description,
     authors: { name: siteConfig.author },
+    alternates,
     openGraph: {
       title: post.title,
       description: post.description,
@@ -67,12 +90,18 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams(): Promise<
-  { slug: string[] }[]
+  { locale: string; slug: string[] }[]
 > {
-  return posts.map((post) => ({ slug: post.slugAsParams.split("/") }));
+  return posts.map((post) => ({
+    locale: post.locale,
+    slug: post.slugAsParams.split("/"),
+  }));
 }
 
 export default async function PostPage({ params }: PostPageProps) {
+  const resolvedParams = await params;
+  setRequestLocale(resolvedParams.locale);
+
   const post = await getPostFromParams(params);
 
   if (!post || !post.published) {
@@ -108,6 +137,9 @@ export default async function PostPage({ params }: PostPageProps) {
           </Link>
         ))}
       </div>
+      <div className="mt-4">
+        <PostLanguageToggle slugAsParams={post.slugAsParams} locale={resolvedParams.locale} />
+      </div>
       <div className="w-16 h-px bg-accent mt-8 mb-12" />
       <div className="prose dark:prose-invert prose-editorial">
         <MDXContent code={post.body} />
@@ -123,7 +155,7 @@ export default async function PostPage({ params }: PostPageProps) {
           reactionsEnabled={giscusConfig.reactionsEnabled}
           emitMetadata={giscusConfig.emitMetadata}
           inputPosition={giscusConfig.inputPosition}
-          lang={giscusConfig.lang}
+          lang={resolvedParams.locale === "zh-TW" ? "zh-TW" : "en"}
         />
       </Suspense>
     </article>

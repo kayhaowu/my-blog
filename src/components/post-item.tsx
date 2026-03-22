@@ -1,5 +1,7 @@
+"use client";
+
 import { Calendar, Clock } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { formatDate } from "@/lib/utils";
 import {
   Card,
@@ -9,6 +11,8 @@ import {
   CardTitle,
   CardDescription,
 } from "./ui/card";
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 interface PostItemProps {
   slug: string;
@@ -29,11 +33,14 @@ export function PostItem({
   categories,
   tags,
 }: PostItemProps) {
+  const t = useTranslations("blog");
+  const locale = useLocale();
+
   return (
     <Card className="h-full flex flex-col rounded-lg border border-border bg-card hover:border-accent/50 hover:translate-y-[-2px] transition-all duration-300 shadow-none">
       <CardHeader>
         <CardTitle className="font-display text-xl tracking-tight">
-          <Link href={slug} className="hover:text-accent transition-colors">
+          <Link href={`/blog/${slug}`} className="hover:text-accent transition-colors">
             {title}
           </Link>
         </CardTitle>
@@ -69,20 +76,20 @@ export function PostItem({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" />
-            <time dateTime={date}>{formatDate(date)}</time>
+            <time dateTime={date}>{formatDate(date, locale)}</time>
           </div>
           {readingTime && (
             <div className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
               <Clock className="h-3.5 w-3.5" />
-              <span>{readingTime} min read</span>
+              <span>{readingTime} {t("minRead")}</span>
             </div>
           )}
         </div>
         <Link
-          href={slug}
+          href={`/blog/${slug}`}
           className="text-accent text-sm hover:underline underline-offset-4 transition-colors"
         >
-          Read more &rarr;
+          {t("readMore")} &rarr;
         </Link>
       </CardFooter>
     </Card>

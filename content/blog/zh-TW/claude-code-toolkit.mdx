@@ -1,0 +1,158 @@
+---
+title: "Claude Code Toolkit — 打造你的 CLI 工作流"
+description: "我為 Claude Code CLI 打造的一系列工具：自訂狀態列、多 session 儀表板、安全防護 hooks，以及 tmux 整合。"
+date: 2026-03-19
+published: true
+featured: true
+categories: ["DevOps"]
+tags: ["Claude Code", "CLI", "tmux", "Developer Tools", "Open Source"]
+---
+
+如果你跟我一樣，每天都在用 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 寫程式，應該多少會碰到一些痛點：現在 context 用了多少？我在跑哪個 model？同時開了好幾個 session 怎麼管？萬一 Claude 跑了一個危險指令怎麼辦？
+
+這些問題困擾我一陣子之後，我決定自己動手解決，做了 **[Claude Code Toolkit](https://github.com/kayhaowu/claude-code-toolkit)** — 一套開源工具，直接嵌入你現有的 Claude Code CLI 環境就能用。
+
+## 問題在哪
+
+Claude Code 本身很強，但原生的介面其實蠻陽春的，你很難即時掌握：
+
+- **Context 用量** — 快爆了嗎？不知道，直到你真的撞上限制
+- **Token 消耗** — 這個 session 花了多少？完全沒概念
+- **多 session 管理** — 同時開 3 個以上的 Claude，在 terminal 之間切來切去超累
+- **安全防護** — Claude 是真的有可能跑出 `rm -rf /` 這種東西的
+
+## Toolkit 裡面有什麼
+
+### 1. 自訂狀態列（Status Line）
+
+在 Claude Code session 底部常駐一條狀態列，所有關鍵資訊一眼就能看到：
+
+```
+Opus 4.6 │ [████████░░░░░░░░░░░░] │ 42% │ 85.2k tokens │  main │ my-proj
+```
+
+**顯示內容：** model 名稱、context 使用量進度條、token 數量、預估費用（可選）、git branch 和專案名稱。
+
+一行指令就能裝好：
+
+```bash
+bash ~/.claude-code-toolkit/statusline/install.sh
+```
+
+### 2. 多 Session 儀表板
+
+同時跑好幾個 Claude session？這個 terminal 儀表板讓你一覽全局：
+
+```
+Claude Code Dashboard  2026-03-03 17:58:58  (every 2s)
+
+PID      PROJECT            MODEL         STATUS    CONTEXT                     CTX%
+------   ----------------   ------------  -------   ------------------------    ----
+730419   sonic_docs         Opus 4.6      WORKING   [████████░░░░░░░░░░░░░░░░]  21%
+582572   laas_agent         Opus 4.6      WORKING   [████████░░░░░░░░░░░░░░░░]  34%
+26983    ubuntu             Opus 4.6      IDLE      [████░░░░░░░░░░░░░░░░░░░░]  14%
+```
+
+跑起來就是一行：
+
+```bash
+sh ~/.claude/dashboard.sh
+```
+
+### 3. Web 儀表板
+
+如果你需要遠端監控，或者單純比較喜歡圖形介面，這個瀏覽器版的儀表板提供：
+
+- **Session 監控** — 即時顯示 PID、專案、model、token 數、費用、git branch 和狀態的卡片
+- **Web Terminal** — 點擊任一 session 就能透過 xterm.js 連進對應的 tmux 視窗
+
+用 Docker 部署：
+
+```bash
+cd dashboard && docker compose up -d
+# 打開 http://127.0.0.1:3141
+```
+
+### 4. 安全防護 Hooks
+
+預先寫好的 hook 腳本，在危險操作真正執行之前攔截下來：
+
+| Hook | 功能說明 |
+|------|---------|
+| `safety-guard` | 攔截 `rm -rf /`、`force push`、`DROP TABLE` 等危險操作 |
+| `sensitive-files` | 阻止存取 `.env`、憑證檔、`*.key` 等敏感檔案 |
+| `auto-format` | Claude 編輯完檔案後自動格式化（prettier/black/gofmt） |
+| `notify-on-stop` | Claude 完成任務時發送桌面通知 |
+| `context-alert` | Context 用量超過 80% 時發出警告 |
+| `usage-logger` | 將 session 使用紀錄寫入 `~/.claude/hooks/usage.jsonl` |
+
+一鍵安裝所有推薦的 hooks：
+
+```bash
+bash hooks/install.sh
+```
+
+### 5. tmux 整合
+
+如果你是 tmux 重度使用者，這個 toolkit 可以原生整合進你的 status bar。它會自動偵測 Catppuccin 主題並套用對應配色。
+
+狀態偵測是透過 Claude Code hooks 做到的，屬於 **事件驅動（event-driven）** — 更新幾乎是即時的，不是用 polling 在輪詢。
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Claude Code session                                                          │
+│ Opus 4.6 │ [████████░░░░░░░░░░░░] │ 42% │ 85.2k tokens │  main │ my-proj    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Claude: ⚡my-proj 42% │ 💤api-server 18% │ 💤docs 7%                         │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+## 5 種配色主題
+
+在 `~/.zshrc` 裡設定你喜歡的主題：
+
+```bash
+export CLAUDE_STATUSLINE_THEME="catppuccin-mocha"
+```
+
+| 主題 | 風格 |
+|------|------|
+| `ansi-default` | 標準 terminal 色彩（4-bit） |
+| `catppuccin-mocha` | 柔和粉彩，很受歡迎的暗色主題（24-bit） |
+| `dracula` | 高對比暗色（24-bit） |
+| `nord` | 北極藍色調（24-bit） |
+| `none` | 純文字，不帶任何顏色 |
+
+## 快速開始
+
+一行安裝：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kayhaowu/claude-code-toolkit/main/install.sh | bash
+```
+
+接著啟用你需要的功能：
+
+```bash
+bash ~/.claude-code-toolkit/statusline/install.sh   # 狀態列 + tmux
+bash ~/.claude-code-toolkit/hooks/install.sh         # 安全防護 hooks
+```
+
+支援 macOS、Ubuntu/Debian 和 CentOS/RHEL。隨時可以用以下指令移除：
+
+```bash
+bash ~/.claude-code-toolkit/uninstall.sh
+```
+
+## 為什麼要做這個
+
+身為一個每天在多個專案之間跑 Claude Code 的系統工程師 — Kubernetes 設定、CI/CD pipeline、Web 應用程式 — 我需要更好的可觀測性，知道每個 session 到底在幹嘛、用了多少資源。原生的 CLI 在你真的撞到 context 上限之前，完全不會給你任何提示。
+
+至於安全防護 hooks，是從一次真實的冷汗經驗來的：Claude 差點在一個接近 production 的環境裡跑了一個破壞性指令。自從加了 `safety-guard` hook 之後，它已經救了我好幾次了。
+
+## 連結
+
+- **GitHub：** [kayhaowu/claude-code-toolkit](https://github.com/kayhaowu/claude-code-toolkit)
+- **歡迎開 Issue 或送 PR** — 如果你有新的 hook 或儀表板功能的想法
+
+如果你每天都在用 Claude Code，真的建議試試看。一行 `curl` 指令裝完之後，你會覺得沒有狀態列的日子是怎麼過來的。

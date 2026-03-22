@@ -8,7 +8,7 @@ import ComparisonTable from "./ComparisonTable";
 import IPv6AddressTable from "./IPv6AddressTable";
 import IPv6ConfigTable from "./IPv6ConfigTable";
 import IEEE80211Table from "./NetworkStandardsTable";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 const useMDXComponent = (code: string) => {
   // 將 runtime 作為參數傳入，確保 MDX 編譯後的程式碼能正確訪問 JSX 運行時

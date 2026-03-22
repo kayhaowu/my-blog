@@ -1,8 +1,11 @@
 import { siteConfig } from "@/config/site";
 import { Mail } from "lucide-react";
 import { Icons } from "./icons";
+import { getTranslations } from "next-intl/server";
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const t = await getTranslations("footer");
+
   return (
     <footer className="mt-24">
       <div className="container max-w-6xl py-8">
@@ -63,7 +66,7 @@ export function SiteFooter() {
             >
               {siteConfig.author}
             </a>
-            . All rights reserved.
+            . {t("rights")}
           </div>
         </div>
       </div>

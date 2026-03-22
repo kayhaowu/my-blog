@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export function MainNav() {
   const pathname = usePathname();
+  const t = useTranslations("nav");
   return (
     <nav className="flex items-center space-x-4 lg:space-x-6">
       <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -22,7 +23,7 @@ export function MainNav() {
             : "text-muted-foreground"
         )}
       >
-        Blog
+        {t("blog")}
       </Link>
       <Link
         href="/about"
@@ -33,7 +34,7 @@ export function MainNav() {
             : "text-muted-foreground"
         )}
       >
-        About
+        {t("about")}
       </Link>
     </nav>
   );
